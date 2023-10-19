@@ -10,7 +10,7 @@
 
 # Unifacisa - Receita Que Doi Menos 🗃️
 
-Repositório para alocar a aplicação REST desenvolvida durante as aulas das competências Integrar Interfaces e Serviços Web e Desenvolver Aplicativos Para Dispositivos Móveis e IOT da Unifacisa.
+Repositório para alocar a aplicação REST desenvolvida durante as aulas das competências <strong>Integrar Interfaces e Serviços Web</strong> e <strong>Desenvolver Aplicativos Para Dispositivos Móveis e IOT</strong> da Unifacisa.
 
 ## Getting Started ▶️
 
