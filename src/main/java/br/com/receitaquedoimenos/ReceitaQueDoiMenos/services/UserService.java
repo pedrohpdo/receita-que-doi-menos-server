@@ -4,8 +4,10 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserMapper;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public UserResponseDTO save(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO save(@Valid UserRequestDTO userRequestDTO) {
         return userMapper.toResponseDTO(userRepository.save(userMapper.toEntity(userRequestDTO)));
     }
 
@@ -26,6 +28,12 @@ public class UserService {
                 userRepository.findById(id)
                         .orElseThrow(() -> new NullPointerException("User not Founded"))
         );
+    }
+
+    public UserResponseDTO get(String id) {
+        return userRepository.findById(id)
+                .map(userFounded -> userMapper.toResponseDTO(userFounded))
+                .orElseThrow(() -> new NullPointerException("User Not Founded"));
     }
 
     public UserResponseDTO updateProfileSettings(String id, UserRequestDTO userRequestDTO) {

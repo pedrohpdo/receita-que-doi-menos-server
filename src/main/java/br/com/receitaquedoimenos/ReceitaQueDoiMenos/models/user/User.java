@@ -1,7 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
@@ -24,9 +24,9 @@ public class User {
     private String email;
 
     @NotBlank
-    @Min(8)
+    @Size(min = 8)
     @NonNull
-    private String password;
+    private CharSequence password;
 
     private ArrayList<String> favoriteRecipes;
     private ArrayList<String> doneRecipes;
