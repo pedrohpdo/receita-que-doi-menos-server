@@ -1,6 +1,8 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserDoneRecipesRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserFavoriteRecipesRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserSaveRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.UserService;
 import jakarta.validation.Valid;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -25,8 +25,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> saveUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userRequestDTO));
+    public ResponseEntity<UserResponseDTO> saveUser(@RequestBody @Valid UserSaveRequestDTO userSaveRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userSaveRequestDTO));
     }
 
     @GetMapping("/{id}")
@@ -34,14 +34,21 @@ public class UserController {
         return ResponseEntity.ok(userService.get(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateProfile(@PathVariable String id, @RequestBody @Valid UserRequestDTO userRequestDTO) {
-        return ResponseEntity.ok(userService.updateProfileSettings(id, userRequestDTO));
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<UserResponseDTO> updateProfile(@PathVariable String id, @RequestBody @Valid UserSaveRequestDTO userSaveRequestDTO) {
+        return ResponseEntity.ok(userService.updateProfileSettings(id, userSaveRequestDTO));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateRecipes(String id, ArrayList<String> userRecipes) {
-        userService.updateFavoriteRecipes(id, userRecipes);
+    @PutMapping("/favoriteRecipes/{id}")
+    public ResponseEntity<Void> updateFavoriteRecipes(@PathVariable String id, @RequestBody UserFavoriteRecipesRequestDTO
+            userFavoriteRecipes) {
+        userService.updateFavoriteRecipes(id, userFavoriteRecipes);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/doneRecipes/{id}")
+    public ResponseEntity<Void> updateDoneRecipes(@PathVariable String id, @RequestBody UserDoneRecipesRequestDTO userDoneRecipes) {
+        userService.updateDoneRecipes(id, userDoneRecipes);
         return ResponseEntity.ok().build();
     }
 }

@@ -12,4 +12,3 @@ public record UserResponseDTO(
         ArrayList<String> favoriteRecipes,
         ArrayList<String> doneRecipes
 ) {}
-

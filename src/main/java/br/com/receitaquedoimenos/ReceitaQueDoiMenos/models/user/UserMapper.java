@@ -4,11 +4,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public User toEntity(UserRequestDTO userRequestDTO) {
+    public User toEntity(UserSaveRequestDTO userSaveRequestDTO) {
         return new User(
-                userRequestDTO.name(),
-                userRequestDTO.email(),
-                userRequestDTO.password()
+                userSaveRequestDTO.name(),
+                userSaveRequestDTO.email(),
+                userSaveRequestDTO.password()
         );
     }
 
