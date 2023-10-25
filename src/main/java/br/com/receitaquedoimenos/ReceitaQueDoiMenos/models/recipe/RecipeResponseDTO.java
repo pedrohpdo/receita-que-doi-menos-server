@@ -1,5 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,13 +11,13 @@ public record RecipeResponseDTO(
         String name,
 
         @NotBlank
-        String type,
+        TypeFood type,
 
         String photo,
         String video,
 
         @NotNull
-        ArrayList<String> ingredients,
+        ArrayList<Ingredient> ingredients,
 
         @NotBlank
         String instructions

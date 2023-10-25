@@ -1,5 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class User {
     @NonNull
     private CharSequence password;
 
-    private ArrayList<String> favoriteRecipes;
-    private ArrayList<String> doneRecipes;
+    private ArrayList<Recipe> favoriteRecipes;
+    private ArrayList<Recipe> doneRecipes;
 
 }

@@ -1,9 +1,9 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.RecipeMapper;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.RecipeRequestDTO;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.RecipeResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.*;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.RecipeRepository;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +19,22 @@ public class RecipeService {
     @Autowired
     RecipeMapper recipeMapper;
 
-    public RecipeResponseDTO createRecipe(RecipeRequestDTO recipeRequestDTO){
+    @Autowired
+    UserRepository userRepository;
+
+    public RecipeResponseDTO createRecipe(RecipeRequestDTO recipeRequestDTO) {
         return recipeMapper.toResponseDTO(recipeRepository.save(recipeMapper.toEntity(recipeRequestDTO)));
     }
 
-    public RecipeResponseDTO getRecipe(String id) {
-        return recipeRepository.findById(id)
-                .map(value -> recipeMapper.toResponseDTO(value))
-                .orElseThrow(() -> new NullPointerException("Recipe Not Found"));
+    public List<RecipeResponseDTO> getRecipesByName(String name) {
+        return recipeRepository.findAllByNameIgnoreCase(name)
+                .stream()
+                .map(recipeMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
 
-    public List<RecipeResponseDTO> getRecipesByType(String type) {
+    public List<RecipeResponseDTO> getRecipesByType(TypeFood type) {
         return recipeRepository.findAllByType(type)
                 .stream()
                 .map(recipeMapper::toResponseDTO)
@@ -58,7 +62,7 @@ public class RecipeService {
                 }).orElseThrow(() -> new NullPointerException("Recipe Not Found"));
     }
 
-    public void deleteRecipe(String id){
+    public void deleteRecipe(String id) {
         recipeRepository.deleteById(id);
     }
 }

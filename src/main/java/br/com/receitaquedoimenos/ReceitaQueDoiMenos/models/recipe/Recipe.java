@@ -1,5 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,17 +22,17 @@ public class Recipe {
     private String name;
 
     @NotBlank
-    private String type;
+    private TypeFood type;
     private String photo;
     private String video;
 
     @NotNull
-    private ArrayList<String> ingredients;
+    private ArrayList<Ingredient> ingredients;
 
     @NotBlank
     private String instructions;
 
-    public Recipe(String name, String type, String photo, String video, ArrayList<String> ingredients, String instructions) {
+    public Recipe(String name, TypeFood type, String photo, String video, ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
         this.type = type;
         this.photo = photo;

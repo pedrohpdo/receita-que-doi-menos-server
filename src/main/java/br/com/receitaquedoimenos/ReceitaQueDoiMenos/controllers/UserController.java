@@ -22,16 +22,6 @@ public class UserController {
     UserService userService;
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User successfully registered"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized to Create User"),
-            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict.")
-    })
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> saveUser(@RequestBody @Valid UserSaveRequestDTO userSaveRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userSaveRequestDTO));
-    }
-
-    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User Founded"),
             @ApiResponse(responseCode = "404", description = "User Not Founded on Database")
     })
@@ -41,7 +31,7 @@ public class UserController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User Sucessfully Updated"),
+            @ApiResponse(responseCode = "200", description = "User Successfully Updated"),
             @ApiResponse(responseCode = "404", description = "User Not Founded on Database"),
             @ApiResponse(responseCode = "409", description = "Failed to update. Information Conflict.")})
     @PutMapping("/profile/{id}")
@@ -49,6 +39,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfileSettings(id, userSaveRequestDTO));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Data Successfully Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded on Database"),
+    })
     @PutMapping("/favoriteRecipes/{id}")
     public ResponseEntity<Void> updateFavoriteRecipes(@PathVariable String id, @RequestBody UserFavoriteRecipesRequestDTO
             userFavoriteRecipes) {
@@ -56,6 +50,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Data Successfully Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded on Database"),
+    })
     @PutMapping("/doneRecipes/{id}")
     public ResponseEntity<Void> updateDoneRecipes(@PathVariable String id, @RequestBody UserDoneRecipesRequestDTO userDoneRecipes) {
         userService.updateDoneRecipes(id, userDoneRecipes);
@@ -63,12 +61,22 @@ public class UserController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User Sucessfully Deleted. No More Content"),
+            @ApiResponse(responseCode = "204", description = "User Successfully Deleted. No More Content"),
             @ApiResponse(responseCode = "404", description = "User Not Founded on Database")
     })
     @DeleteMapping
     public ResponseEntity<Void> deleteUser(String id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Data Successfully Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded on Database"),
+    })
+    @PutMapping("/{idUser}/{idRecipe}")
+    public ResponseEntity<Void> favoriteRecipe(@PathVariable String idUser, @PathVariable String idRecipe){
+        userService.favoriteRecipe(idUser, idUser);
+        return ResponseEntity.ok().build();
     }
 }

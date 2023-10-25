@@ -1,7 +1,9 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.RecipeRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +17,8 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
-    public UserResponseDTO save(@Valid UserSaveRequestDTO userSaveRequestDTO) {
-        String encryptedPass = BCrypt.withDefaults().hashToString(12, userSaveRequestDTO.password().toCharArray());
-        User newUser = userMapper.toEntity(userSaveRequestDTO);
-        newUser.setPassword(encryptedPass);
-
-        return userMapper.toResponseDTO(userRepository.save(newUser));
-    }
-
-    public void delete(String id) {
-        userRepository.delete(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new NullPointerException("User not Founded"))
-        );
-    }
+    @Autowired
+    RecipeRepository recipeRepository;
 
     public UserResponseDTO get(String id) {
         return userRepository.findById(id)
@@ -46,6 +36,7 @@ public class UserService {
 
                     userFounded.setName(userSaveRequestDTO.name());
                     userFounded.setEmail(userSaveRequestDTO.email());
+
                     userRepository.save(userFounded);
                     return userMapper.toResponseDTO(userFounded);
                 })
@@ -61,11 +52,30 @@ public class UserService {
     }
 
 
-    public void updateDoneRecipes(String id, UserDoneRecipesRequestDTO userDoneRecipes) {
+    public void updateDoneRecipes(String id, UserDoneRecipesRequestDTO userRecipes) {
         userRepository.findById(id)
                 .ifPresentOrElse(userFounded -> {
-                    userFounded.setDoneRecipes(userDoneRecipes.doneRecipes());
+                    userFounded.setDoneRecipes(userRecipes.doneRecipes());
                     userRepository.save(userFounded);
                 }, () -> new NullPointerException("User Not Founded"));
+    }
+
+    public void delete(String id) {
+        userRepository.delete(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new NullPointerException("User not Founded"))
+        );
+    }
+
+    public void favoriteRecipe(String idUser, String idRecipe) {
+        Recipe recipe = recipeRepository.findById(idRecipe)
+                .orElseThrow(() -> new RuntimeException());
+
+        userRepository.findById(idUser)
+                .ifPresentOrElse(userFounded -> {
+                    userFounded.getFavoriteRecipes().add(recipe);
+                    userRepository.save(userFounded);
+
+                }, () -> new RuntimeException());
     }
 }
