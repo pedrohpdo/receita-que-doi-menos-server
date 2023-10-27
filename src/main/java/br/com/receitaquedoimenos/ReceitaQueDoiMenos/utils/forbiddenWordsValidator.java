@@ -8,11 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class WordValidator {
+public class forbiddenWordsValidator {
 
     private ArrayList<String> forbiddenWords;
 
-    public WordValidator(){
+    public forbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();
         this.forbiddenWords.add("pau");
         this.forbiddenWords.add("rola");
