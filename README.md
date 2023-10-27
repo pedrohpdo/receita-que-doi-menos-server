@@ -2,7 +2,7 @@
   <img alt="Unifacisa" src="https://img.shields.io/badge/Unifacisa-00599C?style=for-the-badge&logo=java&logoColor=white">
   <img alt="Java" src="https://img.shields.io/badge/Java-B1361E?style=for-the-badge&logo=coffeescript&logoColor=white">
   <img alt="Spring_Framework" src="https://img.shields.io/badge/Spring_Framework-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
-  <img alt="Spring_Security" src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img alt="Spring_Boot" src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
   <img alt="Spring Security" src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
   <img alt="Jwt" src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
   <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white">
@@ -10,7 +10,7 @@
 
 # Unifacisa - Receita Que Doi Menos 🗃️
 
-Repositório para alocar a aplicação REST desenvolvida durante as aulas das competências <strong>Integrar Interfaces e Serviços Web</strong> e <strong>Desenvolver Aplicativos Para Dispositivos Móveis e IOT</strong> da Unifacisa.
+Repositório para alocar a aplicação REST desenvolvida durante as aulas das competências <strong>[Integrar Interfaces e Serviços Web](https://github.com/pedrohpdo/integrar-interfaces-servicos-web-unifacisa)</strong> e <strong>Desenvolver Aplicativos Para Dispositivos Móveis e IOT</strong> da Unifacisa.
 
 ## Getting Started ▶️
 
