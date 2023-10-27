@@ -9,8 +9,8 @@ public class RecipeMapper {
         return new Recipe(
                 requestDTO.name(),
                 requestDTO.type(),
-                requestDTO.photo(),
-                requestDTO.video(),
+                requestDTO.photoURL(),
+                requestDTO.videoURL(),
                 requestDTO.ingredients(),
                 requestDTO.instructions()
         );
@@ -20,8 +20,8 @@ public class RecipeMapper {
         return new RecipeResponseDTO(
                 recipe.getName(),
                 recipe.getType(),
-                recipe.getPhoto(),
-                recipe.getVideo(),
+                recipe.getPhotoURL(),
+                recipe.getVideoURL(),
                 recipe.getIngredients(),
                 recipe.getInstructions()
         );

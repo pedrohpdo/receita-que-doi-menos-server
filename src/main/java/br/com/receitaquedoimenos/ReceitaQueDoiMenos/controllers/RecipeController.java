@@ -26,7 +26,6 @@ public class RecipeController {
             @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data"),
             @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict.")
     })
-
     @PostMapping
     public ResponseEntity<RecipeResponseDTO> createRecipe(@Valid @RequestBody RecipeRequestDTO recipeRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(recipeService.createRecipe(recipeRequestDTO));
@@ -68,4 +67,13 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.updateRecipe(id, recipeRequestDTO));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
+            @ApiResponse(responseCode = "404", description = "Recipe Id Not Founded on Database"),
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable String id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
+    }
 }

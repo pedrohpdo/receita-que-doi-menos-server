@@ -13,8 +13,8 @@ public record RecipeRequestDTO(
         @NotBlank
         TypeFood type,
 
-        String photo,
-        String video,
+        String photoURL,
+        String videoURL,
 
         @NotNull
         ArrayList<Ingredient> ingredients,

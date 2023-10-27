@@ -23,8 +23,8 @@ public class Recipe {
 
     @NotBlank
     private TypeFood type;
-    private String photo;
-    private String video;
+    private String photoURL;
+    private String videoURL;
 
     @NotNull
     private ArrayList<Ingredient> ingredients;
@@ -32,11 +32,11 @@ public class Recipe {
     @NotBlank
     private String instructions;
 
-    public Recipe(String name, TypeFood type, String photo, String video, ArrayList<Ingredient> ingredients, String instructions) {
+    public Recipe(String name, TypeFood type, String photoURL, String videoURL, ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
         this.type = type;
-        this.photo = photo;
-        this.video = video;
+        this.photoURL = photoURL;
+        this.videoURL = videoURL;
         this.ingredients = ingredients;
         this.instructions = instructions;
     }

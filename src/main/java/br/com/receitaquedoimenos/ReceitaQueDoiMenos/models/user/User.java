@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,7 +28,7 @@ public class User {
     @NotBlank
     @Size(min = 8)
     @NonNull
-    private CharSequence password;
+    private String password;
 
     private ArrayList<Recipe> favoriteRecipes;
     private ArrayList<Recipe> doneRecipes;

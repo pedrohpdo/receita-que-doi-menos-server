@@ -4,6 +4,7 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
 
 import java.util.ArrayList;
 
-public record UserFavoriteRecipesRequestDTO(
-        ArrayList<Recipe> favoriteRecipes
-) {}
+public record UserDoneRecipesDTO(
+        ArrayList<Recipe> doneRecipes
+) {
+}

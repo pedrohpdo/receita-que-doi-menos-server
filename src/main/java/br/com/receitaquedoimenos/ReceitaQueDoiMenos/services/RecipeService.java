@@ -1,7 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.*;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.RecipeRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,6 @@ public class RecipeService {
     @Autowired
     RecipeMapper recipeMapper;
 
-    @Autowired
-    UserRepository userRepository;
-
     public RecipeResponseDTO createRecipe(RecipeRequestDTO recipeRequestDTO) {
         return recipeMapper.toResponseDTO(recipeRepository.save(recipeMapper.toEntity(recipeRequestDTO)));
     }
@@ -35,7 +32,7 @@ public class RecipeService {
 
 
     public List<RecipeResponseDTO> getRecipesByType(TypeFood type) {
-        return recipeRepository.findAllByType(type)
+        return recipeRepository.findAllByTypeFood(type)
                 .stream()
                 .map(recipeMapper::toResponseDTO)
                 .collect(Collectors.toList());
@@ -53,13 +50,13 @@ public class RecipeService {
                 .map(recipeFounded -> {
                     recipeFounded.setName(recipeRequestDTO.name());
                     recipeFounded.setType(recipeRequestDTO.type());
-                    recipeFounded.setPhoto(recipeRequestDTO.photo());
-                    recipeFounded.setVideo(recipeRequestDTO.video());
+                    recipeFounded.setPhotoURL(recipeRequestDTO.photoURL());
+                    recipeFounded.setVideoURL(recipeRequestDTO.videoURL());
                     recipeFounded.setInstructions(recipeRequestDTO.instructions());
                     recipeFounded.setIngredients(recipeRequestDTO.ingredients());
 
                     return recipeMapper.toResponseDTO(recipeRepository.save(recipeFounded));
-                }).orElseThrow(() -> new NullPointerException("Recipe Not Found"));
+                }).orElseThrow(() -> new DataNotFoundException("Recipe Not Found"));
     }
 
     public void deleteRecipe(String id) {
