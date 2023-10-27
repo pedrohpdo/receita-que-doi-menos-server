@@ -26,6 +26,12 @@ Todos os pré-requisitos necessários para execução do projeto deverão ser de
 - [MongoDB](https://www.mongodb.com/pt-br)
 - [Repositório](https://github.com/pedrohpdo/receita-que-doi-menos-server)
 
+### Protótipo ✏️
+
+É possível acessar o Layout Mobile do projeto [clicando aqui](https://www.figma.com/file/N6568lZYNEG94JrZwgQpKL/receita-que-doi-menos?type=design&node-id=0%3A1&mode=design&t=mV2Y7Pqrp9xx7F7B-1).
+
+Lembrando que você deve ter uma conta no [Figma](https://www.figma.com/) para ter acesso ao Layout.
+
 ### Configurando as Variáveis de Ambiente 🌐
 
 O projeto utiliza um arquivo `.properties` para armazenar informações sensíveis, como credenciais do banco de dados e configurações de autenticação. Certifique-se de criar um arquivo .properties na raiz do projeto e configurar as variáveis necessárias.
