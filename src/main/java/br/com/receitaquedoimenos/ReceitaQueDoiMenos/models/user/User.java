@@ -1,11 +1,10 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,7 +29,7 @@ public class User {
     @NonNull
     private String password;
 
-    private ArrayList<Recipe> favoriteRecipes;
-    private ArrayList<Recipe> doneRecipes;
+    private ArrayList<Meal> favoriteMeals;
+    private ArrayList<Meal> doneMeals;
 
 }

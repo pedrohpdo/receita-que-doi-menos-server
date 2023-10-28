@@ -1,7 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.TypeFood;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe;
+package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Document(collection = "recipes")
 @Data
 @AllArgsConstructor
-public class Recipe {
+public class Meal {
 
     @Id
     private String id;
@@ -22,7 +22,7 @@ public class Recipe {
     private String name;
 
     @NotBlank
-    private TypeFood type;
+    private TypeMeal type;
     private String photoURL;
     private String videoURL;
 
@@ -32,7 +32,7 @@ public class Recipe {
     @NotBlank
     private String instructions;
 
-    public Recipe(String name, TypeFood type, String photoURL, String videoURL, ArrayList<Ingredient> ingredients, String instructions) {
+    public Meal(String name, TypeMeal type, String photoURL, String videoURL, ArrayList<Ingredient> ingredients, String instructions) {
         this.name = name;
         this.type = type;
         this.photoURL = photoURL;

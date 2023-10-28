@@ -1,6 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
@@ -10,6 +10,6 @@ public record UserResponseDTO(
         String id,
         String name,
         String email,
-        ArrayList<Recipe> favoriteRecipes,
-        ArrayList<Recipe> doneRecipes
+        ArrayList<Meal> favoriteMeals,
+        ArrayList<Meal> doneMeals
 ) {}

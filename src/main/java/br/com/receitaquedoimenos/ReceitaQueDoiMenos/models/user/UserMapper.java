@@ -17,8 +17,8 @@ public class UserMapper {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getFavoriteRecipes(),
-                user.getDoneRecipes()
+                user.getFavoriteMeals(),
+                user.getDoneMeals()
         );
     }
 }

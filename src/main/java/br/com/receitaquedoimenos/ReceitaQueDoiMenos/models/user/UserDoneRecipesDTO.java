@@ -1,10 +1,10 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.recipe.Recipe;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 
 import java.util.ArrayList;
 
 public record UserDoneRecipesDTO(
-        ArrayList<Recipe> doneRecipes
+        ArrayList<Meal> doneMeals
 ) {
 }
