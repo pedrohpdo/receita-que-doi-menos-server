@@ -1,8 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ConflictDataException;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataAlreadyExistsException;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -77,5 +75,27 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.value(), exception.getLocalizedMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(UnauthorizedOperationException.class)
+    public ResponseEntity<Object> handlerUnauthorizedOperationException(
+            UnauthorizedOperationException exception,
+            WebRequest request
+    ) {
+        log.error("Operação não autorizada" + exception.getMessage());
+        ErrorResponse response = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(ForbbidenWordException.class)
+    public ResponseEntity<Object> handlerForbbidenWordException(
+            ForbbidenWordException exception,
+            WebRequest request
+    ) {
+        log.error("Palavra Proibida Encontrada" + exception.getMessage());
+        ErrorResponse response = new ErrorResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }
