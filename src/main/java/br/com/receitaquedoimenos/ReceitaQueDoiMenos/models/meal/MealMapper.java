@@ -8,22 +8,24 @@ public class MealMapper {
     public Meal toEntity(MealRequestDTO requestDTO) {
         return new Meal(
                 requestDTO.name(),
-                requestDTO.type(),
+                requestDTO.typeMeal(),
                 requestDTO.photoURL(),
                 requestDTO.videoURL(),
                 requestDTO.ingredients(),
-                requestDTO.instructions()
+                requestDTO.instructions(),
+                requestDTO.creatorID()
         );
     }
 
     public MealResponseDTO toResponseDTO(Meal meal) {
         return new MealResponseDTO(
                 meal.getName(),
-                meal.getType(),
+                meal.getTypeMeal(),
                 meal.getPhotoURL(),
                 meal.getVideoURL(),
                 meal.getIngredients(),
-                meal.getInstructions()
+                meal.getInstructions(),
+                meal.getCreatorID()
         );
     }
 }

@@ -1,7 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserSaveRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +32,7 @@ public class AuthenticationController {
 
     })
     @PostMapping("/user/new")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserSaveRequestDTO userSaveRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.createUser(userSaveRequestDTO));
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.createUser(userRequestDTO));
     }
 }

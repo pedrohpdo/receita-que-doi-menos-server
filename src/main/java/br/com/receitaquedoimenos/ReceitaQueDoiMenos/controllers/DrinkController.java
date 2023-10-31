@@ -10,7 +10,17 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
+
+
 import java.util.List;
 
 @RestController
@@ -27,7 +37,7 @@ public class DrinkController {
     })
     @PostMapping
     public ResponseEntity<DrinkResponseDTO> createDrink(@RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(drinkService.createRecipe(drinkRequestDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(drinkService.createDrink(drinkRequestDTO));
     }
 
     @ApiResponses(value = {
@@ -35,8 +45,8 @@ public class DrinkController {
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
     @GetMapping("/byId/{id}")
-    public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String id){
-        return ResponseEntity.ok(drinkService.getDrinkById(id));
+    public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String drinkID){
+        return ResponseEntity.ok(drinkService.getDrinkById(drinkID));
     }
 
     @ApiResponses(value = {
@@ -51,18 +61,18 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
-    @GetMapping("/byType/{type}")
-    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByType(@PathVariable TypeDrink type){
-        return ResponseEntity.ok(drinkService.getDrinksByType(type));
+    @GetMapping("/byType/{typeDrink}")
+    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByType(@PathVariable TypeDrink typeDrink){
+        return ResponseEntity.ok(drinkService.getDrinksByType(typeDrink));
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
-    @GetMapping("/byName/{name}")
-    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByName(@PathVariable String name) {
-        return ResponseEntity.ok(drinkService.getDrinksByName(name));
+    @GetMapping("/byName/{drinkName}")
+    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByName(@PathVariable String drinkName) {
+        return ResponseEntity.ok(drinkService.getDrinksByName(drinkName));
 
     }
 
@@ -70,18 +80,18 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Successfully Updated"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<DrinkResponseDTO> updateDrink(@PathVariable String id, @RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
-        return ResponseEntity.ok(drinkService.updateDrink(id, drinkRequestDTO));
+    @PutMapping("/{drinkID}/{userID}")
+    public ResponseEntity<DrinkResponseDTO> updateDrink(@PathVariable String drinkID, @PathVariable String userID, @RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
+        return ResponseEntity.ok(drinkService.updateDrink(drinkID, userID, drinkRequestDTO));
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDrink(@PathVariable String id) {
-        drinkService.deleteDrink(id);
+    @DeleteMapping("/{drinkID}/{userID}")
+    public ResponseEntity<Void> deleteDrink(@PathVariable String drinkID, @PathVariable String userID) {
+        drinkService.deleteDrink(drinkID, userID);
         return ResponseEntity.noContent().build();
     }
 }

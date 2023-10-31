@@ -27,7 +27,7 @@ public class MealController {
             @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict.")
     })
     @PostMapping
-    public ResponseEntity<MealResponseDTO> createMeal(@Valid @RequestBody MealRequestDTO mealRequestDTO){
+    public ResponseEntity<MealResponseDTO> createMeal(@RequestBody @Valid MealRequestDTO mealRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(mealService.createMeal(mealRequestDTO));
     }
 
@@ -43,8 +43,8 @@ public class MealController {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
     })
-    @GetMapping("/byType/{type}")
-    public ResponseEntity<List<MealResponseDTO>> getRecipesByType(@PathVariable TypeMeal typeMeal) {
+    @GetMapping("/byType/{typeMeal}")
+    public ResponseEntity<List<MealResponseDTO>> getRecipesByTypeMeal(@PathVariable TypeMeal typeMeal) {
         return ResponseEntity.ok(mealService.getMealsByTypeMeal(typeMeal));
     }
 
@@ -52,9 +52,18 @@ public class MealController {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
     })
-    @GetMapping("byId/{name}")
-    public ResponseEntity<List<MealResponseDTO>> getRecipeByName(@PathVariable String name){
+    @GetMapping("byName/{name}")
+    public ResponseEntity<List<MealResponseDTO>> getMealsByName(@PathVariable String name){
         return ResponseEntity.ok(mealService.getMealsByName(name));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+    })
+    @GetMapping("byMealID/{mealID}")
+    public ResponseEntity<MealResponseDTO> getMealsById(@PathVariable String mealID){
+        return ResponseEntity.ok(mealService.getMealsById(mealID));
     }
 
     @ApiResponses(value = {
@@ -62,18 +71,19 @@ public class MealController {
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
             @ApiResponse(responseCode = "409", description = "Failed to update. Information Conflict.")
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String id, @RequestBody @Valid MealRequestDTO mealRequestDTO) {
-        return ResponseEntity.ok(mealService.updateMealInfo(id, mealRequestDTO));
+    @PutMapping("/{mealID}/{userID}")
+    public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String mealID, String userID,
+                                                        @RequestBody @Valid MealRequestDTO mealRequestDTO) {
+        return ResponseEntity.ok(mealService.updateMealInfo(mealID, userID, mealRequestDTO));
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
             @ApiResponse(responseCode = "404", description = "Meal Id Not Founded on Database"),
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipeById(@PathVariable String id) {
-        mealService.deleteMeal(id);
+    @DeleteMapping("/{mealID}/{userID}")
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable String mealID, String userID) {
+        mealService.deleteMeal(mealID, userID);
         return ResponseEntity.noContent().build();
     }
 }

@@ -4,11 +4,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public User toEntity(UserSaveRequestDTO userSaveRequestDTO) {
+    public User toEntity(UserRequestDTO userRequestDTO) {
         return new User(
-                userSaveRequestDTO.name(),
-                userSaveRequestDTO.email(),
-                userSaveRequestDTO.password()
+                userRequestDTO.name(),
+                userRequestDTO.email(),
+                userRequestDTO.password()
         );
     }
 
@@ -17,8 +17,11 @@ public class UserMapper {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getCreatedMeals(),
                 user.getFavoriteMeals(),
-                user.getDoneMeals()
+                user.getCreatedDrinks(),
+                user.getFavoriteDrinks()
+
         );
     }
 }

@@ -1,6 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,8 +11,8 @@ public record MealRequestDTO(
         @NotBlank
         String name,
 
-        @NotBlank
-        TypeMeal type,
+        @NotNull
+        TypeMeal typeMeal,
 
         String photoURL,
         String videoURL,
@@ -20,6 +21,9 @@ public record MealRequestDTO(
         ArrayList<Ingredient> ingredients,
 
         @NotBlank
-        String instructions
+        String instructions,
+
+        @NotBlank
+        String creatorID
 ) {
 }

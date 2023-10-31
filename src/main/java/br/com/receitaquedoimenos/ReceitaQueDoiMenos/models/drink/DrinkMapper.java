@@ -8,11 +8,12 @@ public class DrinkMapper {
     public Drink toEntity(DrinkRequestDTO drinkRequestDTO) {
         return new Drink(
                 drinkRequestDTO.name(),
-                drinkRequestDTO.type(),
+                drinkRequestDTO.typeDrink(),
                 drinkRequestDTO.photoURL(),
                 drinkRequestDTO.videoURL(),
                 drinkRequestDTO.ingredients(),
-                drinkRequestDTO.instructions()
+                drinkRequestDTO.instructions(),
+                drinkRequestDTO.creatorID()
         );
     }
 
@@ -20,11 +21,12 @@ public class DrinkMapper {
         return new DrinkResponseDTO(
                 drink.getId(),
                 drink.getName(),
-                drink.getType(),
+                drink.getTypeDrink(),
                 drink.getPhotoURL(),
                 drink.getVideoURL(),
                 drink.getIngredients(),
-                drink.getInstructions()
+                drink.getInstructions(),
+                drink.getCreatorID()
 
         );
     }

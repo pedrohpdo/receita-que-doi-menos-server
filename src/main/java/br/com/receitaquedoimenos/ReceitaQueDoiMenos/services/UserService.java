@@ -2,10 +2,13 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ConflictDataException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.Drink;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.DrinkRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.MealRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,67 +21,54 @@ public class UserService {
     MealRepository mealRepository;
 
     @Autowired
+    DrinkRepository drinkRepository;
+
+    @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    ForbiddenWordsValidator wordValidator;
 
-    public UserResponseDTO getInfo(String id) {
-        return userRepository.findById(id)
+    public UserResponseDTO getInfo(String userID) {
+        return userRepository.findById(userID)
                 .map(userFounded -> userMapper.toResponseDTO(userFounded))
                 .orElseThrow(() -> new DataNotFoundException("User Not Founded"));
     }
 
-    public UserResponseDTO updateProfileInfo(String id, UserSaveRequestDTO userSaveRequestDTO) {
-        if (userRepository.existsByEmailAndIdNot(userSaveRequestDTO.email(), id)) {
+    public UserResponseDTO updateProfileInfo(String userID, UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByEmailAndIdNot(userRequestDTO.email(), userID)) {
             throw new ConflictDataException("Already Exists An Email on System.");
         }
 
-        return userRepository.findById(id)
+        return userRepository.findById(userID)
                 .map(userFounded -> {
-                    //check encript password
-                    userFounded.setPassword(userFounded.getPassword());
-                    userFounded.setName(userSaveRequestDTO.name());
-                    userFounded.setEmail(userSaveRequestDTO.email());
+                    wordValidator.validateUserData(userRequestDTO);
 
-                    userRepository.save(userFounded);
-                    return userMapper.toResponseDTO(userFounded);
+                    userFounded.setPassword(userFounded.getPassword());
+                    userFounded.setName(userRequestDTO.name());
+                    userFounded.setEmail(userRequestDTO.email());
+
+                    return userMapper.toResponseDTO(userRepository.save(userFounded));
                 })
                 .orElseThrow(() -> new DataNotFoundException("User Not Founded"));
     }
 
-    public UserFavoriteRecipesDTO updateFavoriteRecipes(String id, UserFavoriteRecipesDTO userFavoriteRecipes) {
-        return userRepository.findById(id)
-                .map(userFounded -> {
-                    userFounded.setFavoriteMeals(userFavoriteRecipes.favoriteMeals());
-                    userRepository.save(userFounded);
-                    return userFavoriteRecipes;
+    public void deleteAccount(String userID) {
+        userRepository.findById(userID)
+                .ifPresentOrElse(user -> {
+                    mealRepository.deleteAll(user.getCreatedMeals());
+                    drinkRepository.deleteAll(user.getCreatedDrinks());
 
-                }).orElseThrow(() -> new DataNotFoundException("User Not Founded"));
+                    userRepository.delete(user);
+                }, () -> new DataNotFoundException("User Not Founded"));
     }
 
 
-    public UserDoneRecipesDTO updateDoneRecipes(String id, UserDoneRecipesDTO userDoneRecipes) {
-        return userRepository.findById(id)
-                .map(userFounded -> {
-                    userFounded.setDoneMeals(userDoneRecipes.doneMeals());
-                    userRepository.save(userFounded);
-                    return userDoneRecipes;
+    public void likeMeal(String userID, String mealID) {
+        Meal meal = mealRepository.findById(mealID)
+                .orElseThrow(() -> new DataNotFoundException("Meal Not Founded"));
 
-                }).orElseThrow(() -> new DataNotFoundException("User Not Founded"));
-    }
-
-    public void deleteAccount(String id) {
-        userRepository.delete(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new DataNotFoundException("User not Founded"))
-        );
-    }
-
-
-    public void favoriteRecipe(String idUser, String idRecipe) {
-        Meal meal = mealRepository.findById(idRecipe)
-                .orElseThrow(() -> new DataNotFoundException("Recipe Not Founded"));
-
-        userRepository.findById(idUser)
+        userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
                     userFounded.getFavoriteMeals().add(meal);
                     userRepository.save(userFounded);
@@ -86,11 +76,11 @@ public class UserService {
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
-    public void unfavoriteRecipe(String idUser, String idRecipe) {
-        Meal meal = mealRepository.findById(idRecipe)
-                .orElseThrow(() -> new DataNotFoundException("Recipe Not Founded"));
+    public void unlikeMeal(String userID, String mealID) {
+        Meal meal = mealRepository.findById(mealID)
+                .orElseThrow(() -> new DataNotFoundException("Meal Not Founded"));
 
-        userRepository.findById(idUser)
+        userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
                     userFounded.getFavoriteMeals().remove(meal);
                     userRepository.save(userFounded);
@@ -98,27 +88,28 @@ public class UserService {
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
-    public void doneRecipe(String idUser, String idRecipe) {
-        Meal meal = mealRepository.findById(idRecipe)
-                .orElseThrow(() -> new DataNotFoundException("Recipe Not Founded"));
+    public void likeDrink(String userID, String drinkID) {
+        Drink drink = drinkRepository.findById(drinkID)
+                .orElseThrow(() -> new DataNotFoundException("Drink Not Founded"));
 
-        userRepository.findById(idUser)
+        userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
-                    userFounded.getDoneMeals().add(meal);
+                    userFounded.getFavoriteDrinks().add(drink);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
-    public void undoneRecipe(String idUser, String idRecipe) {
-        Meal meal = mealRepository.findById(idRecipe)
-                .orElseThrow(() -> new DataNotFoundException("Recipe Not Founded"));
+    public void unlikeDrink(String userID, String drinkID) {
+        Drink drink = drinkRepository.findById(drinkID)
+                .orElseThrow(() -> new DataNotFoundException("Drink Not Founded"));
 
-        userRepository.findById(idUser)
+        userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
-                    userFounded.getDoneMeals().remove(meal);
+                    userFounded.getFavoriteDrinks().remove(drink);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
+
 }
