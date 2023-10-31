@@ -1,6 +1,10 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.forbbidenWordException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ForbbidenWordException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -8,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class forbiddenWordsValidator {
+public class ForbiddenWordsValidator {
 
     private ArrayList<String> forbiddenWords;
 
-    public forbiddenWordsValidator(){
+    public ForbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();
         this.forbiddenWords.add("pau");
         this.forbiddenWords.add("rola");
@@ -46,11 +50,34 @@ public class forbiddenWordsValidator {
         for (String word:
              this.forbiddenWords) {
             Pattern pattern = Pattern.compile("\\b" + Pattern.quote(word) + "\\b", Pattern.CASE_INSENSITIVE);
-            Matcher match = pattern.matcher(word);
+            Matcher match = pattern.matcher(text);
 
             if(match.find()) {
-                throw new forbbidenWordException();
+                throw new ForbbidenWordException("Forbidden Word Founded");
             }
+        }
+    }
+
+    public void validateUserData(UserRequestDTO user){
+        validateString(user.name());
+        validateString(user.email());
+        validateString(user.password());
+    }
+
+    public void validateMeal(MealRequestDTO meal) {
+        validateString(meal.name());
+        validateString(meal.instructions());
+        validateIngredients(meal.ingredients());
+    }
+
+    public void validateDrink(DrinkRequestDTO drink) {
+        validateString(drink.name());
+        validateString(drink.instructions());
+        validateIngredients(drink.ingredients());
+    }
+    private void validateIngredients(ArrayList<Ingredient> ingredients) {
+        for (Ingredient stringToValidate : ingredients) {
+            validateString(stringToValidate.getName());
         }
     }
 }
