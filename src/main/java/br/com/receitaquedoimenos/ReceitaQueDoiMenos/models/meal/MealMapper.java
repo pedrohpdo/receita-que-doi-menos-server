@@ -2,6 +2,8 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
 public class MealMapper {
 
@@ -28,4 +30,5 @@ public class MealMapper {
                 meal.getCreatorID()
         );
     }
+
 }

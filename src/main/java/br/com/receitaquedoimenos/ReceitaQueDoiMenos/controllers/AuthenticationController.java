@@ -26,9 +26,9 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User Created Successfully"),
-            @ApiResponse(responseCode = "409", description = "Cannot Create User. Info Conflict on Database"),
-            @ApiResponse(responseCode = "422", description = "Cannot Process User Data. Arguments Not Valid")
+            @ApiResponse(responseCode = "201", description = "User Created"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded"),
+            @ApiResponse(responseCode = "409", description = "Already Exists An Email on System")
 
     })
     @PostMapping("/user/new")

@@ -24,7 +24,9 @@ public class MealController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data successfully registered"),
             @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data"),
-            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict.")
+            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict"),
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @PostMapping
     public ResponseEntity<MealResponseDTO> createMeal(@RequestBody @Valid MealRequestDTO mealRequestDTO){
@@ -32,7 +34,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "201", description = "Data Founded")
     })
     @GetMapping("/all")
     public ResponseEntity<List<MealResponseDTO>> getAllRecipes(){
@@ -41,7 +43,7 @@ public class MealController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
     @GetMapping("/byType/{typeMeal}")
     public ResponseEntity<List<MealResponseDTO>> getRecipesByTypeMeal(@PathVariable TypeMeal typeMeal) {
@@ -50,7 +52,7 @@ public class MealController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
     @GetMapping("byName/{name}")
     public ResponseEntity<List<MealResponseDTO>> getMealsByName(@PathVariable String name){
@@ -59,7 +61,7 @@ public class MealController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
     @GetMapping("byMealID/{mealID}")
     public ResponseEntity<MealResponseDTO> getMealsById(@PathVariable String mealID){
@@ -69,7 +71,8 @@ public class MealController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
-            @ApiResponse(responseCode = "409", description = "Failed to update. Information Conflict.")
+            @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @PutMapping("/{mealID}/{userID}")
     public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String mealID, String userID,
@@ -80,6 +83,8 @@ public class MealController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
             @ApiResponse(responseCode = "404", description = "Meal Id Not Founded on Database"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Delete Operation"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @DeleteMapping("/{mealID}/{userID}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable String mealID, String userID) {

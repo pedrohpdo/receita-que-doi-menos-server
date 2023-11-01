@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,9 @@ public class DrinkController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Data successfully registered"),
             @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data"),
-            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict.")
+            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict"),
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @PostMapping
     public ResponseEntity<DrinkResponseDTO> createDrink(@RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
@@ -44,7 +47,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
-    @GetMapping("/byId/{id}")
+    @GetMapping("/byId/{drinkID}")
     public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String drinkID){
         return ResponseEntity.ok(drinkService.getDrinkById(drinkID));
     }
@@ -77,8 +80,10 @@ public class DrinkController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Successfully Updated"),
-            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
+            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @PutMapping("/{drinkID}/{userID}")
     public ResponseEntity<DrinkResponseDTO> updateDrink(@PathVariable String drinkID, @PathVariable String userID, @RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
@@ -87,8 +92,11 @@ public class DrinkController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
-            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
+            @ApiResponse(responseCode = "404", description = "Meal Id Not Founded on Database"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Delete Operation"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @DeleteMapping("/{drinkID}/{userID}")
     public ResponseEntity<Void> deleteDrink(@PathVariable String drinkID, @PathVariable String userID) {
         drinkService.deleteDrink(drinkID, userID);

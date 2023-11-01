@@ -11,7 +11,7 @@ public record DrinkRequestDTO(
         @NotBlank
         String name,
 
-        @NotBlank
+        @NotNull
         TypeDrink typeDrink,
 
         String photoURL,

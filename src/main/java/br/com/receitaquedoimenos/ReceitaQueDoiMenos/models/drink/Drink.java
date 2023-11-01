@@ -4,7 +4,9 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 
 @Document(collection = "drinks")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Drink {
     @Id
     private String id;

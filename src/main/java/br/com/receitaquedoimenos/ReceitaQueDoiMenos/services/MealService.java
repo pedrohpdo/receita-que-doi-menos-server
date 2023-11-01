@@ -8,6 +8,7 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.MealRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class MealService {
 
     public MealResponseDTO createMeal(MealRequestDTO mealRequestDTO) {
         wordValidator.validateMeal(mealRequestDTO);
-
         Meal newMeal = mealRepository.save(mealMapper.toEntity(mealRequestDTO));
 
         userRepository.findById(mealRequestDTO.creatorID())
@@ -74,7 +74,7 @@ public class MealService {
         return mealRepository.findById(mealID)
                 .map(mealFounded -> {
                     if (!mealFounded.getCreatorID().equals(userID)) {
-                        throw new UnauthorizedOperationException("Unauthorized Operation");
+                        throw new UnauthorizedOperationException("Unauthorized Update Operation");
                     }
 
                     wordValidator.validateMeal(mealRequestDTO);
@@ -89,7 +89,6 @@ public class MealService {
                     Meal mealUpdated = mealRepository.save(mealFounded);
 
                     //Cascade Operation on UserCreator
-
                     userRepository.findById(userID)
                             .ifPresent(userCreator -> {
                                 for (Meal mealToUpdate: userCreator.getCreatedMeals()) {

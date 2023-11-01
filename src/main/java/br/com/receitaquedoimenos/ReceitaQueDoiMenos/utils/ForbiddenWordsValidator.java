@@ -19,11 +19,23 @@ public class ForbiddenWordsValidator {
     public ForbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();
         this.forbiddenWords.add("pau");
+        this.forbiddenWords.add("paunocu");
+        this.forbiddenWords.add("pnc");
+        this.forbiddenWords.add("cabeçaderola");
+        this.forbiddenWords.add("cabecaderola");
         this.forbiddenWords.add("rola");
         this.forbiddenWords.add("pica");
         this.forbiddenWords.add("pika");
 
+        this.forbiddenWords.add("filhadaputa");
+        this.forbiddenWords.add("fiadaputa");
+        this.forbiddenWords.add("filadaputa");
+        this.forbiddenWords.add("feladaputa");
+        this.forbiddenWords.add("fidaputa");
+        this.forbiddenWords.add("fideputa");
+        this.forbiddenWords.add("fdp");
         this.forbiddenWords.add("puta");
+        this.forbiddenWords.add("fiderapariga");
         this.forbiddenWords.add("rapariga");
         this.forbiddenWords.add("quenga");
 
@@ -44,6 +56,7 @@ public class ForbiddenWordsValidator {
         this.forbiddenWords.add("foda-se");
         this.forbiddenWords.add("fodase");
         this.forbiddenWords.add("fodasse");
+        this.forbiddenWords.add("viado");
     }
 
     public void validateString(String text) {

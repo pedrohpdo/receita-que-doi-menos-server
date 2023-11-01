@@ -20,7 +20,7 @@ public class UserController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User Founded"),
-            @ApiResponse(responseCode = "404", description = "User Not Founded on Database")
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
     @GetMapping("/{userID}")
     public ResponseEntity<UserResponseDTO> getInfo(@PathVariable String userID) {
@@ -28,9 +28,12 @@ public class UserController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User Successfully Updated"),
-            @ApiResponse(responseCode = "404", description = "User Not Founded on Database"),
-            @ApiResponse(responseCode = "409", description = "Failed to update. Information Conflict.")})
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
+            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded"),
+            @ApiResponse(responseCode = "409", description = "Already Exists An Email on System")
+    })
     @PutMapping("/profile/{userID}")
     public ResponseEntity<UserResponseDTO> updateProfileInfo(@PathVariable String userID, @RequestBody @Valid UserRequestDTO userRequestDTO) {
         return ResponseEntity.ok(userService.updateProfileInfo(userID, userRequestDTO));
@@ -38,7 +41,7 @@ public class UserController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User Successfully Deleted. No Content"),
-            @ApiResponse(responseCode = "404", description = "User Id Not Founded on Database")
+            @ApiResponse(responseCode = "404", description = "User Not Founded")
     })
     @DeleteMapping("/{userID}")
     public ResponseEntity<Void> deleteUser(String userID) {
@@ -49,6 +52,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Data Successfully Updated"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded on Database"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Like Operation"),
     })
     @PutMapping("likeMeal/{userID}/{mealID}")
     public ResponseEntity<Void> likeMeal(@PathVariable String userID, @PathVariable String mealID) {
@@ -69,6 +73,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Data Successfully Updated"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded on Database"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized Like Operation")
     })
     @PutMapping("likeDrink/{userID}/{drinkID}")
     public ResponseEntity<Void> likeDrink(@PathVariable String userID, @PathVariable String drinkID) {

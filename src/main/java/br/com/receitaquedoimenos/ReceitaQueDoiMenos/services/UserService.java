@@ -2,6 +2,7 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ConflictDataException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.UnauthorizedOperationException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.Drink;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
@@ -70,6 +71,8 @@ public class UserService {
 
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
+                    if(meal.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Like Operation");
+
                     userFounded.getFavoriteMeals().add(meal);
                     userRepository.save(userFounded);
 
@@ -94,6 +97,8 @@ public class UserService {
 
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
+                    if(drink.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Like Operation");
+
                     userFounded.getFavoriteDrinks().add(drink);
                     userRepository.save(userFounded);
 
