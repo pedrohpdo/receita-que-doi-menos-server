@@ -1,5 +1,6 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.TypeMeal;
@@ -15,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recipe")
+@RequestMapping("/meals")
 public class MealController {
 
     @Autowired
     MealService mealService;
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data successfully registered"),
+            @ApiResponse(responseCode = "201", description = "CREATED"),
             @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data"),
             @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict"),
             @ApiResponse(responseCode = "404", description = "User Not Found"),
@@ -34,7 +35,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded")
+            @ApiResponse(responseCode = "200", description = "Data Founded")
     })
     @GetMapping("/all")
     public ResponseEntity<List<MealResponseDTO>> getAllRecipes(){
@@ -42,7 +43,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
     @GetMapping("/byType/{typeMeal}")
@@ -51,7 +52,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
     @GetMapping("byName/{name}")
@@ -60,7 +61,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
     @GetMapping("byMealID/{mealID}")
@@ -69,7 +70,7 @@ public class MealController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")

@@ -73,9 +73,7 @@ public class MealService {
     public MealResponseDTO updateMealInfo(String mealID, String userID, MealRequestDTO mealRequestDTO) {
         return mealRepository.findById(mealID)
                 .map(mealFounded -> {
-                    if (!mealFounded.getCreatorID().equals(userID)) {
-                        throw new UnauthorizedOperationException("Unauthorized Update Operation");
-                    }
+                    if (!mealFounded.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Update Operation");
 
                     wordValidator.validateMeal(mealRequestDTO);
 
@@ -129,9 +127,8 @@ public class MealService {
     public void deleteMeal(String mealID, String userID) {
         mealRepository.findById(mealID)
                 .ifPresentOrElse(meal -> {
-                    if (!meal.getCreatorID().equals(userID)) {
-                        throw new UnauthorizedOperationException("Unauthorized Operation");
-                    }
+                    if (!meal.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Operation");
+
                     mealRepository.delete(meal);
 
                     //Cascade Operation on UserCreator
@@ -147,7 +144,7 @@ public class MealService {
                             });
 
                     // Cascade Operations
-                    for (User userToUpdate: userRepository.findByIdNot(userID)) {
+                    for (User userToUpdate: userRepository.findByFavoriteMealsIdAndIdNot(mealID, userID)) {
                         for (Meal checkedMeals: userToUpdate.getFavoriteMeals()) {
                             if (checkedMeals.getId().equals(mealID)){
                                 userToUpdate.getFavoriteMeals().remove(checkedMeals);

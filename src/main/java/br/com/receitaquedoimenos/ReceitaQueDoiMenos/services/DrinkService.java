@@ -11,7 +11,6 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidato
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class DrinkService {
                     userRepository.save(user);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
-        return drinkMapper.toResponseDTO(drinkRepository.save(drinkMapper.toEntity(drinkRequestDTO)));
+        return drinkMapper.toResponseDTO(newDrink);
     }
 
     public List<DrinkResponseDTO> getDrinksByName(String drinkName) {
@@ -75,9 +74,8 @@ public class DrinkService {
     public DrinkResponseDTO updateDrink(String drinkID, String userID, DrinkRequestDTO drinkRequestDTO) {
         return drinkRepository.findById(drinkID)
                 .map(drinkFounded -> {
-                    if (drinkFounded.getCreatorID().equals(userID)) {
-                        throw new UnauthorizedOperationException("Unauthorized Delete Operation");
-                    }
+                    if (!drinkFounded.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Delete Operation");
+
                     wordValidator.validateDrink(drinkRequestDTO);
 
                     drinkFounded.setName(drinkRequestDTO.name());
@@ -107,7 +105,21 @@ public class DrinkService {
                             });
 
                     // Cascade Operation on All Other Users
-                    for (User userToUpdate: userRepository.findByIdNot(userID)) {
+//                    for (User userToUpdate: userRepository.findByFavoriteDrinksIdAndIdNot(drinkID, userID)) {
+//                        for(Drink drinkToUpdate : userToUpdate.getFavoriteDrinks()){
+//                            if (drinkToUpdate.getId().equals(drinkID)) {
+//                                drinkToUpdate.setName(drinkRequestDTO.name());
+//                                drinkToUpdate.setTypeDrink(drinkRequestDTO.typeDrink());
+//                                drinkToUpdate.setPhotoURL(drinkRequestDTO.photoURL());
+//                                drinkToUpdate.setVideoURL(drinkRequestDTO.videoURL());
+//                                drinkToUpdate.setInstructions(drinkRequestDTO.instructions());
+//                                drinkToUpdate.setIngredients(drinkRequestDTO.ingredients());
+//                                userRepository.save(userToUpdate);
+//                                break;
+//                            }
+//                        }
+//                    }
+                    for (User userToUpdate: userRepository.findByFavoriteDrinksIdAndIdNot(drinkID, userID)) {
                         for(Drink drinkToUpdate : userToUpdate.getFavoriteDrinks()){
                             if (drinkToUpdate.getId().equals(drinkID)) {
                                 drinkToUpdate.setName(drinkRequestDTO.name());
@@ -130,9 +142,8 @@ public class DrinkService {
     public void deleteDrink(String drinkID, String userID) {
         drinkRepository.findById(drinkID)
                 .ifPresentOrElse(drinkFounded -> {
-                        if (!drinkFounded.getCreatorID().equals(userID)) {
-                            throw new UnauthorizedOperationException("Unauthorized Delete Operation");
-                        }
+                        if (!drinkFounded.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Delete Operation");
+
                         drinkRepository.delete(drinkFounded);
 
                         //Cascade Operation on UserCreator

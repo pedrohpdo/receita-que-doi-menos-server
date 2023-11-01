@@ -80,7 +80,7 @@ public class DrinkController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")

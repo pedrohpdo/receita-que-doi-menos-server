@@ -22,9 +22,8 @@ public class AuthenticationService {
     @Autowired
     ForbiddenWordsValidator validator;
     public UserResponseDTO createUser(@Valid UserRequestDTO userRequestDTO) {
-        if (userRepository.existsByEmail(userRequestDTO.email())) {
-            throw new DataAlreadyExistsException("User Already Exists"); //
-        }
+        if (userRepository.existsByEmail(userRequestDTO.email())) throw new DataAlreadyExistsException("User Already Exists");
+
         validator.validateUserData(userRequestDTO);
         //encript password
         return userMapper.toResponseDTO(userRepository.save(userMapper.toEntity(userRequestDTO)));
