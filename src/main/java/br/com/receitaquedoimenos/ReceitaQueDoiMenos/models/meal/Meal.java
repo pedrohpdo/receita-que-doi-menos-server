@@ -41,8 +41,11 @@ public class Meal {
     @NotBlank
     private String creatorID;
 
-    public Meal(String name, TypeMeal typeMeal, String photoURL, String videoURL, ArrayList<Ingredient> ingredients,
+    public Meal(String name, TypeMeal typeMeal,
+                String photoURL, String videoURL,
+                ArrayList<Ingredient> ingredients,
                 String instructions, String creatorID) {
+
         this.name = name;
         this.typeMeal = typeMeal;
         this.photoURL = photoURL;

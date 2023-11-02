@@ -19,6 +19,7 @@ public class ForbiddenWordsValidator {
     public ForbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();
         this.forbiddenWords.add("pau");
+        this.forbiddenWords.add("p4u");
         this.forbiddenWords.add("paunocu");
         this.forbiddenWords.add("pnc");
         this.forbiddenWords.add("cabeçaderola");
@@ -40,7 +41,6 @@ public class ForbiddenWordsValidator {
         this.forbiddenWords.add("quenga");
 
         this.forbiddenWords.add("siririca");
-        this.forbiddenWords.add("pariu");
         this.forbiddenWords.add("transar");
         this.forbiddenWords.add("cu");
         this.forbiddenWords.add("buceta");
@@ -57,6 +57,8 @@ public class ForbiddenWordsValidator {
         this.forbiddenWords.add("fodase");
         this.forbiddenWords.add("fodasse");
         this.forbiddenWords.add("viado");
+
+        this.forbiddenWords.add("javascript");
     }
 
     public void validateString(String text) {

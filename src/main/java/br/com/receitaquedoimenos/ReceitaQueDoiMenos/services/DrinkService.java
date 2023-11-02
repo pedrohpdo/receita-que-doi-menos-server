@@ -3,7 +3,6 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.UnauthorizedOperationException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.*;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.DrinkRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;

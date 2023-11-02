@@ -7,6 +7,5 @@ import java.util.ArrayList;
 
 public interface DrinkRepository extends MongoRepository<Drink, String> {
     ArrayList<Drink> findAllByTypeDrink(TypeDrink type);
-
     ArrayList<Drink> findAllByNameIgnoreCase(String name);
 }
