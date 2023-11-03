@@ -38,7 +38,7 @@ O projeto utiliza um arquivo `.properties` para armazenar informações sensíve
 
 Dentro dele crie a seguinte credencial
 
-`DATABASE_URL="your_mongodb_database_url"`
+`spring.data.mongodb.uri="your_mongodb_database_url"`
 
 ## Autores 🧑‍💻
 
