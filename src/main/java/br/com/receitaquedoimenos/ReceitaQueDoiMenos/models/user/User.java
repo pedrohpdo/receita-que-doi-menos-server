@@ -65,7 +65,6 @@ public class User implements UserDetails {
     }
 
     /**
-     *
      * @return uma Collection(List) de permissões que o usuário pode ter
      */
     @Override

@@ -12,7 +12,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByIdNot(String id);
     List<User> findByFavoriteDrinksIdAndIdNot(String drinkID, String userID);
     List<User> findByFavoriteMealsIdAndIdNot(String mealID, String userID);
-
     UserDetails findByEmail(String email);
 }
 
