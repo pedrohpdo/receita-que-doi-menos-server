@@ -98,4 +98,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
+
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<Object> handlerTokenException(TokenException exception, WebRequest request) {
+        ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+
+        log.error("Problem: " + exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
