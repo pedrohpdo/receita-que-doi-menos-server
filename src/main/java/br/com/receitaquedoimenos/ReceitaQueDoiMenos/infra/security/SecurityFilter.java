@@ -30,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = this.recoverToken(request);
 
         if(token != null) {
-            var email = tokenService.validateToken(token);
+            String email = tokenService.validateToken(token);
             UserDetails userDetails = userRepository.findByEmail(email);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

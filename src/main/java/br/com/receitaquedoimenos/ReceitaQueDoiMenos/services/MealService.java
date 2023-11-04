@@ -34,7 +34,7 @@ public class MealService {
 
         userRepository.findById(mealRequestDTO.creatorID())
                 .ifPresentOrElse(user -> {
-                    user.getCreatedMeals().add(newMeal);
+                    user.getCreatedMealsID().add(newMeal.getId());
                     userRepository.save(user);
 
                 }, () -> new DataNotFoundException("User Not Found"));
@@ -86,37 +86,37 @@ public class MealService {
                     Meal mealUpdated = mealRepository.save(mealFounded);
 
                     //Cascade Operation on UserCreator
-                    userRepository.findById(userID)
-                            .ifPresent(userCreator -> {
-                                for (Meal mealToUpdate: userCreator.getCreatedMeals()) {
-                                    if (mealToUpdate.getId().equals(mealID)) {
-                                        mealToUpdate.setName(mealRequestDTO.name());
-                                        mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
-                                        mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
-                                        mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
-                                        mealToUpdate.setInstructions(mealRequestDTO.instructions());
-                                        mealToUpdate.setIngredients(mealRequestDTO.ingredients());
-                                        userRepository.save(userCreator);
-                                        break;
-                                    }
-                                }
-                            });
+//                    userRepository.findById(userID)
+//                            .ifPresent(userCreator -> {
+//                                for (Meal mealToUpdate: userCreator.getCreatedMeals()) {
+//                                    if (mealToUpdate.getId().equals(mealID)) {
+//                                        mealToUpdate.setName(mealRequestDTO.name());
+//                                        mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
+//                                        mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
+//                                        mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
+//                                        mealToUpdate.setInstructions(mealRequestDTO.instructions());
+//                                        mealToUpdate.setIngredients(mealRequestDTO.ingredients());
+//                                        userRepository.save(userCreator);
+//                                        break;
+//                                    }
+//                                }
+//                            });
 
                     // Cascade Operation on All Other Users
-                    for (User userToUpdate: userRepository.findByIdNot(userID)) {
-                        for(Meal mealToUpdate : userToUpdate.getFavoriteMeals()){
-                            if (mealToUpdate.getId().equals(mealID)) {
-                                mealToUpdate.setName(mealRequestDTO.name());
-                                mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
-                                mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
-                                mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
-                                mealToUpdate.setInstructions(mealRequestDTO.instructions());
-                                mealToUpdate.setIngredients(mealRequestDTO.ingredients());
-                                userRepository.save(userToUpdate);
-                                break;
-                            }
-                        }
-                    }
+//                    for (User userToUpdate: userRepository.findByIdNot(userID)) {
+//                        for(Meal mealToUpdate : userToUpdate.getFavoriteMeals()){
+//                            if (mealToUpdate.getId().equals(mealID)) {
+//                                mealToUpdate.setName(mealRequestDTO.name());
+//                                mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
+//                                mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
+//                                mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
+//                                mealToUpdate.setInstructions(mealRequestDTO.instructions());
+//                                mealToUpdate.setIngredients(mealRequestDTO.ingredients());
+//                                userRepository.save(userToUpdate);
+//                                break;
+//                            }
+//                        }
+//                    }
                     return mealMapper.toResponseDTO(mealUpdated);
 
                 }).orElseThrow(() -> new DataNotFoundException("Recipe Not Found"));
@@ -133,24 +133,14 @@ public class MealService {
                     //Cascade Operation on UserCreator
                     userRepository.findById(userID)
                             .ifPresent(userCreator -> {
-                                for (Meal mealToDelete: userCreator.getCreatedMeals()) {
-                                    if (mealToDelete.getId().equals(mealID)) {
-                                        userCreator.getCreatedMeals().remove(mealToDelete);
-                                        userRepository.save(userCreator);
-                                        break;
-                                    }
-                                }
+                                userCreator.getCreatedMealsID().remove(mealID);
+                                userRepository.save(userCreator);
                             });
 
                     // Cascade Operations
-                    for (User userToUpdate: userRepository.findByFavoriteMealsIdAndIdNot(mealID, userID)) {
-                        for (Meal checkedMeals: userToUpdate.getFavoriteMeals()) {
-                            if (checkedMeals.getId().equals(mealID)){
-                                userToUpdate.getFavoriteMeals().remove(checkedMeals);
+                    for (User userToUpdate: userRepository.findByFavoriteMealsIDContainingAndIdNot(mealID, userID)) {
+                                userToUpdate.getFavoriteMealsID().remove(mealID);
                                 userRepository.save(userToUpdate);
-                                break;
-                            }
-                        }
                     }
                 }, () -> new DataNotFoundException("Recipe Not Found"));
     }

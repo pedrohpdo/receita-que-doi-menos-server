@@ -17,10 +17,10 @@ public class UserMapper {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getCreatedMeals(),
-                user.getFavoriteMeals(),
-                user.getCreatedDrinks(),
-                user.getFavoriteDrinks()
+                user.getCreatedMealsID(),
+                user.getFavoriteMealsID(),
+                user.getCreatedDrinksID(),
+                user.getFavoriteDrinksID()
 
         );
     }

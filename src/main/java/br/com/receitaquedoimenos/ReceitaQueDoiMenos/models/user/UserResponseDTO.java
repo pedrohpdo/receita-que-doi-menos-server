@@ -11,9 +11,9 @@ public record UserResponseDTO(
         String id,
         String name,
         String email,
-        ArrayList<Meal> createdMeals,
-        ArrayList<Meal> favoriteMeals,
-        ArrayList<Drink> createdDrinks,
-        ArrayList<Drink> favoriteDrinks
+        ArrayList<String> createdMealsID,
+        ArrayList<String> favoriteMealsID,
+        ArrayList<String> createdDrinksID,
+        ArrayList<String> favoriteDrinkID
 
 ) {}

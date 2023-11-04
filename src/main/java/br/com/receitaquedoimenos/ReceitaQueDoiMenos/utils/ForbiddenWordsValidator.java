@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @Component
 public class ForbiddenWordsValidator {
 
-    private ArrayList<String> forbiddenWords;
+    private final ArrayList<String> forbiddenWords;
 
     public ForbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();

@@ -57,10 +57,10 @@ public class UserService {
     public void deleteAccount(String userID) {
         userRepository.findById(userID)
                 .ifPresentOrElse(user -> {
-                    mealRepository.deleteAll(user.getCreatedMeals());
-                    drinkRepository.deleteAll(user.getCreatedDrinks());
-
+                    mealRepository.deleteAllById(user.getCreatedMealsID());
+                    drinkRepository.deleteAllById(user.getCreatedDrinksID());
                     userRepository.delete(user);
+
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
@@ -73,19 +73,16 @@ public class UserService {
                 .ifPresentOrElse(userFounded -> {
                     if(meal.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Like Operation");
 
-                    userFounded.getFavoriteMeals().add(meal);
+                    userFounded.getFavoriteMealsID().add(mealID);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
     public void unlikeMeal(String userID, String mealID) {
-        Meal meal = mealRepository.findById(mealID)
-                .orElseThrow(() -> new DataNotFoundException("Meal Not Founded"));
-
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
-                    userFounded.getFavoriteMeals().remove(meal);
+                    userFounded.getFavoriteMealsID().remove(mealID);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
@@ -99,19 +96,16 @@ public class UserService {
                 .ifPresentOrElse(userFounded -> {
                     if(drink.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Like Operation");
 
-                    userFounded.getFavoriteDrinks().add(drink);
+                    userFounded.getFavoriteDrinksID().add(drinkID);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
     public void unlikeDrink(String userID, String drinkID) {
-        Drink drink = drinkRepository.findById(drinkID)
-                .orElseThrow(() -> new DataNotFoundException("Drink Not Founded"));
-
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
-                    userFounded.getFavoriteDrinks().remove(drink);
+                    userFounded.getFavoriteDrinksID().remove(drinkID);
                     userRepository.save(userFounded);
 
                 }, () -> new DataNotFoundException("User Not Founded"));

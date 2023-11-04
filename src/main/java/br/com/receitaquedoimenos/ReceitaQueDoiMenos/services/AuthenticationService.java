@@ -39,8 +39,7 @@ public class AuthenticationService implements UserDetailsService {
 
 
     public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
-        if (userRepository.existsByEmail(userRequestDTO.email()))
-            throw new DataAlreadyExistsException("User Already Exists");
+        if (userRepository.existsByEmail(userRequestDTO.email())) throw new DataAlreadyExistsException("User Already Exists");
 
         validator.validateUserData(userRequestDTO);
         String passwordEncoded = passwordEncoder.encode(userRequestDTO.password());

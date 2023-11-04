@@ -88,7 +88,7 @@ public class MealController {
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @DeleteMapping("/{mealID}/{userID}")
-    public ResponseEntity<Void> deleteRecipeById(@PathVariable String mealID, String userID) {
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable String mealID,  @PathVariable String userID) {
         mealService.deleteMeal(mealID, userID);
         return ResponseEntity.noContent().build();
     }

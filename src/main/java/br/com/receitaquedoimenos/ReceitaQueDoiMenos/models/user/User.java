@@ -45,13 +45,13 @@ public class User implements UserDetails {
     @NonNull
     private String password;
 
-    private ArrayList<Meal> favoriteMeals = new ArrayList<>();
+    private ArrayList<String> favoriteMealsID = new ArrayList<>();
 
-    private ArrayList<Drink> favoriteDrinks = new ArrayList<>();
+    private ArrayList<String> favoriteDrinksID = new ArrayList<>();
 
-    private ArrayList<Meal> createdMeals = new ArrayList<>();
+    private ArrayList<String> createdMealsID = new ArrayList<>();
 
-    private ArrayList<Drink> createdDrinks = new ArrayList<>();
+    private ArrayList<String> createdDrinksID = new ArrayList<>();
 
 
     public User(String userID) {

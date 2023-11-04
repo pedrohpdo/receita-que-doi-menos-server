@@ -35,10 +35,11 @@ public class DrinkService {
 
         userRepository.findById(drinkRequestDTO.creatorID())
                 .ifPresentOrElse(user -> {
-                    user.getCreatedDrinks().add(newDrink);
+                    user.getCreatedDrinksID().add(newDrink.getId());
                     userRepository.save(user);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
+
         return drinkMapper.toResponseDTO(newDrink);
     }
 
@@ -73,7 +74,8 @@ public class DrinkService {
     public DrinkResponseDTO updateDrink(String drinkID, String userID, DrinkRequestDTO drinkRequestDTO) {
         return drinkRepository.findById(drinkID)
                 .map(drinkFounded -> {
-                    if (!drinkFounded.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Delete Operation");
+                    if (!drinkFounded.getCreatorID().equals(userID))
+                        throw new UnauthorizedOperationException("Unauthorized Delete Operation");
 
                     wordValidator.validateDrink(drinkRequestDTO);
 
@@ -84,91 +86,32 @@ public class DrinkService {
                     drinkFounded.setInstructions(drinkRequestDTO.instructions());
                     drinkFounded.setIngredients(drinkRequestDTO.ingredients());
 
-                    Drink drinkUpdated = drinkRepository.save(drinkFounded);
+                    return drinkMapper.toResponseDTO(drinkRepository.save(drinkFounded));
 
-                    //Cascade Operation on UserCreator
-                    userRepository.findById(userID)
-                            .ifPresent(userCreator -> {
-                                for (Drink drinkToUpdate: userCreator.getCreatedDrinks()) {
-                                    if (drinkToUpdate.getId().equals(drinkID)) {
-                                        drinkToUpdate.setName(drinkRequestDTO.name());
-                                        drinkToUpdate.setTypeDrink(drinkRequestDTO.typeDrink());
-                                        drinkToUpdate.setPhotoURL(drinkRequestDTO.photoURL());
-                                        drinkToUpdate.setVideoURL(drinkRequestDTO.videoURL());
-                                        drinkToUpdate.setInstructions(drinkRequestDTO.instructions());
-                                        drinkToUpdate.setIngredients(drinkRequestDTO.ingredients());
-                                        userRepository.save(userCreator);
-                                        break;
-                                    }
-                                }
-                            });
-
-                    // Cascade Operation on All Other Users
-//                    for (User userToUpdate: userRepository.findByFavoriteDrinksIdAndIdNot(drinkID, userID)) {
-//                        for(Drink drinkToUpdate : userToUpdate.getFavoriteDrinks()){
-//                            if (drinkToUpdate.getId().equals(drinkID)) {
-//                                drinkToUpdate.setName(drinkRequestDTO.name());
-//                                drinkToUpdate.setTypeDrink(drinkRequestDTO.typeDrink());
-//                                drinkToUpdate.setPhotoURL(drinkRequestDTO.photoURL());
-//                                drinkToUpdate.setVideoURL(drinkRequestDTO.videoURL());
-//                                drinkToUpdate.setInstructions(drinkRequestDTO.instructions());
-//                                drinkToUpdate.setIngredients(drinkRequestDTO.ingredients());
-//                                userRepository.save(userToUpdate);
-//                                break;
-//                            }
-//                        }
-//                    }
-                    for (User userToUpdate: userRepository.findByFavoriteDrinksIdAndIdNot(drinkID, userID)) {
-                        for(Drink drinkToUpdate : userToUpdate.getFavoriteDrinks()){
-                            if (drinkToUpdate.getId().equals(drinkID)) {
-                                drinkToUpdate.setName(drinkRequestDTO.name());
-                                drinkToUpdate.setTypeDrink(drinkRequestDTO.typeDrink());
-                                drinkToUpdate.setPhotoURL(drinkRequestDTO.photoURL());
-                                drinkToUpdate.setVideoURL(drinkRequestDTO.videoURL());
-                                drinkToUpdate.setInstructions(drinkRequestDTO.instructions());
-                                drinkToUpdate.setIngredients(drinkRequestDTO.ingredients());
-                                userRepository.save(userToUpdate);
-                                break;
-                            }
-                        }
-                    }
-
-
-                    return drinkMapper.toResponseDTO(drinkUpdated);
                 }).orElseThrow(() -> new DataNotFoundException("Drink Not Found"));
     }
 
     public void deleteDrink(String drinkID, String userID) {
         drinkRepository.findById(drinkID)
                 .ifPresentOrElse(drinkFounded -> {
-                        if (!drinkFounded.getCreatorID().equals(userID)) throw new UnauthorizedOperationException("Unauthorized Delete Operation");
+                            if (!drinkFounded.getCreatorID().equals(userID))
+                                throw new UnauthorizedOperationException("Unauthorized Delete Operation");
 
-                        drinkRepository.delete(drinkFounded);
+                            drinkRepository.delete(drinkFounded);
 
-                        //Cascade Operation on UserCreator
-                        userRepository.findById(userID)
-                                .ifPresent(userCreator -> {
-                                    for (Drink drinkToDelete: userCreator.getCreatedDrinks()) {
-                                        if (drinkToDelete.getId().equals(drinkID)) {
-                                            userCreator.getCreatedDrinks().remove(drinkToDelete);
-                                            userRepository.save(userCreator);
-                                            break;
-                                        }
-                                    }
-                                });
+                            //Cascade Operation on UserCreator
+                            userRepository.findById(userID)
+                                    .ifPresent(userCreator -> {
+                                        userCreator.getCreatedDrinksID().remove(drinkID);
+                                        userRepository.save(userCreator);
+                                    });
 
-                        // Cascade Operations
-                        for (User userToUpdate: userRepository.findByIdNot(userID)) {
-                            for (Drink checkedDrinks: userToUpdate.getFavoriteDrinks()) {
-                                if (checkedDrinks.getId().equals(drinkID)){
-                                    userToUpdate.getFavoriteDrinks().remove(checkedDrinks);
-                                    userRepository.save(userToUpdate);
-                                    break;
-                                }
+                            // Cascade Operations
+                            for (User userToUpdate : userRepository.findByFavoriteDrinksIDContainingAndIdNot(drinkID, userID)) {
+                                userToUpdate.getFavoriteDrinksID().remove(drinkID);
+                                userRepository.save(userToUpdate);
                             }
-                        }
 
-                    },
-                    () -> new DataNotFoundException("Drink Not Found"));
+                        }, () -> new DataNotFoundException("Drink Not Found"));
     }
 }
