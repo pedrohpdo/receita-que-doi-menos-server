@@ -4,7 +4,12 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ConflictDat
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.UnauthorizedOperationException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.Drink;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkMapper;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealMapper;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.DrinkRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.MealRepository;
@@ -13,6 +18,9 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidato
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
     @Autowired
@@ -20,6 +28,12 @@ public class UserService {
 
     @Autowired
     MealRepository mealRepository;
+
+    @Autowired
+    MealMapper mealMapper;
+
+    @Autowired
+    DrinkMapper drinkMapper;
 
     @Autowired
     DrinkRepository drinkRepository;
@@ -35,6 +49,46 @@ public class UserService {
                 .map(userFounded -> userMapper.toResponseDTO(userFounded))
                 .orElseThrow(() -> new DataNotFoundException("User Not Founded"));
     }
+
+    public List<MealResponseDTO> getAllCreatedMeals(String userID) {
+        return userRepository.findById(userID)
+                .map(userFounded -> mealRepository.findAllById(userFounded.getCreatedMealsID())
+                        .stream()
+                        .map(mealMapper::toResponseDTO)
+                        .collect(Collectors.toList())
+                ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
+    }
+
+    public List<MealResponseDTO> getAllFavoriteMeals(String userID) {
+        return userRepository.findById(userID)
+                .map(userFounded -> mealRepository.findAllById(userFounded.getFavoriteMealsID())
+                        .stream()
+                        .map(mealMapper::toResponseDTO)
+                        .collect(Collectors.toList())
+
+                ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
+    }
+
+    public List<DrinkResponseDTO> getAllCreatedDrinks(String userID) {
+        return userRepository.findById(userID)
+                .map(userFounded -> drinkRepository.findAllById(userFounded.getCreatedDrinksID())
+                        .stream()
+                        .map(drinkMapper::toResponseDTO)
+                        .collect(Collectors.toList())
+
+                ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
+    }
+
+    public List<DrinkResponseDTO> getAllFavoriteDrinks(String userID) {
+        return userRepository.findById(userID)
+                .map(userFounded -> drinkRepository.findAllById(userFounded.getFavoriteDrinksID())
+                        .stream()
+                        .map(drinkMapper::toResponseDTO)
+                        .collect(Collectors.toList())
+
+                ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
+    }
+
 
     public UserResponseDTO updateProfileInfo(String userID, UserRequestDTO userRequestDTO) {
         if (userRepository.existsByEmailAndIdNot(userRequestDTO.email(), userID)) {

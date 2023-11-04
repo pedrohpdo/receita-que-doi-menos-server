@@ -76,7 +76,7 @@ public class MealController {
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
     @PutMapping("/{mealID}/{userID}")
-    public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String mealID, String userID,
+    public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String mealID, @PathVariable String userID,
                                                         @RequestBody @Valid MealRequestDTO mealRequestDTO) {
         return ResponseEntity.ok(mealService.updateMealInfo(mealID, userID, mealRequestDTO));
     }

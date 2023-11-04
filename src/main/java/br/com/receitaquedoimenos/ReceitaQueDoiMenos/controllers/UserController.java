@@ -1,5 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.UserService;
@@ -9,6 +11,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -22,9 +26,45 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
-    @GetMapping("/{userID}")
+    @GetMapping("/info/{userID}")
     public ResponseEntity<UserResponseDTO> getInfo(@PathVariable String userID) {
         return ResponseEntity.ok(userService.getInfo(userID));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
+    })
+    @GetMapping("/createdRecipes/{userID}")
+    public ResponseEntity<List<MealResponseDTO>> getCreatedMealsInfo(@PathVariable String userID) {
+        return ResponseEntity.ok(userService.getAllCreatedMeals(userID));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
+    })
+    @GetMapping("/favoriteRecipes/{userID}")
+    public ResponseEntity<List<MealResponseDTO>> getFavoriteMealsInfo(@PathVariable String userID) {
+        return ResponseEntity.ok(userService.getAllFavoriteMeals(userID));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
+    })
+    @GetMapping("/createdDrinks/{userID}")
+    public ResponseEntity<List<DrinkResponseDTO>> getCreatedDrinksInfo(@PathVariable String userID) {
+        return ResponseEntity.ok(userService.getAllCreatedDrinks(userID));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User Founded"),
+            @ApiResponse(responseCode = "404", description = "Data Not Founded")
+    })
+    @GetMapping("/favoriteDrinks/{userID}")
+    public ResponseEntity<List<DrinkResponseDTO>> getFavoriteDrinksInfo(@PathVariable String userID) {
+        return ResponseEntity.ok(userService.getAllFavoriteDrinks(userID));
     }
 
     @ApiResponses(value = {
