@@ -34,11 +34,19 @@ Lembrando que você deve ter uma conta no [Figma](https://www.figma.com/) para t
 
 ### Configurando as Variáveis de Ambiente 🌐
 
-O projeto utiliza um arquivo `.properties` para armazenar informações sensíveis, como credenciais do banco de dados e configurações de autenticação. Certifique-se de criar um arquivo .properties na raiz do projeto e configurar as variáveis necessárias.
+O projeto utiliza um arquivo `.properties` para armazenar informações sensíveis, como credenciais do banco de dados e configurações de autenticação.
 
-Dentro dele crie a seguinte credencial
+Caso queira executar o projeto localmente, certifique-se de criar um arquivo .properties na raiz do projeto e configurar as variáveis necessárias.
 
-`spring.data.mongodb.uri="your_mongodb_database_url"`
+Dentro dele crie a seguintes credenciais, ou implemente seus respectivos valores:
+
+
+`spring.data.mongodb.uri=${DATABASE_URL}` <br>
+`api.security.token.secret=${JWT_SECRET}` <br>
+`api.security.token.issuer=${ISSUER}` <br>
+`api.security.token.access.duration=${ACCESS-DURATION}` <br>
+`api.security.token.refresh.duration=${REFRESH-DURATION}`
+
 
 ## Autores 🧑‍💻
 
