@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +30,13 @@ public class MealController {
             @ApiResponse(responseCode = "404", description = "User Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @PostMapping
     public ResponseEntity<MealResponseDTO> createMeal(@RequestBody @Valid MealRequestDTO mealRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(mealService.createMeal(mealRequestDTO));
     }
 
+    @Transactional
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Data Founded")
     })
@@ -46,6 +49,7 @@ public class MealController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
+    @Transactional
     @GetMapping("/byType/{typeMeal}")
     public ResponseEntity<List<MealResponseDTO>> getRecipesByTypeMeal(@PathVariable TypeMeal typeMeal) {
         return ResponseEntity.ok(mealService.getMealsByTypeMeal(typeMeal));
@@ -55,6 +59,7 @@ public class MealController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
+    @Transactional
     @GetMapping("byName/{name}")
     public ResponseEntity<List<MealResponseDTO>> getMealsByName(@PathVariable String name){
         return ResponseEntity.ok(mealService.getMealsByName(name));
@@ -64,6 +69,7 @@ public class MealController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
+    @Transactional
     @GetMapping("byMealID/{mealID}")
     public ResponseEntity<MealResponseDTO> getMealsById(@PathVariable String mealID){
         return ResponseEntity.ok(mealService.getMealsById(mealID));
@@ -75,6 +81,7 @@ public class MealController {
             @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @PutMapping("/{mealID}/{userID}")
     public ResponseEntity<MealResponseDTO> updateRecipe(@PathVariable String mealID, @PathVariable String userID,
                                                         @RequestBody @Valid MealRequestDTO mealRequestDTO) {
@@ -87,6 +94,7 @@ public class MealController {
             @ApiResponse(responseCode = "401", description = "Unauthorized Delete Operation"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @DeleteMapping("/{mealID}/{userID}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable String mealID,  @PathVariable String userID) {
         mealService.deleteMeal(mealID, userID);

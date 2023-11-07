@@ -38,6 +38,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "404", description = "User Not Found"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @PostMapping
     public ResponseEntity<DrinkResponseDTO> createDrink(@RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(drinkService.createDrink(drinkRequestDTO));
@@ -47,6 +48,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded")
     })
+    @Transactional
     @GetMapping("/byId/{drinkID}")
     public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String drinkID){
         return ResponseEntity.ok(drinkService.getDrinkById(drinkID));
@@ -55,6 +57,7 @@ public class DrinkController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
     })
+    @Transactional
     @GetMapping("/all")
     public ResponseEntity<List<DrinkResponseDTO>> getAllDrinks(){
         return ResponseEntity.ok(drinkService.getAllDrinks());
@@ -64,6 +67,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
+    @Transactional
     @GetMapping("/byType/{typeDrink}")
     public ResponseEntity<List<DrinkResponseDTO>> getDrinksByType(@PathVariable TypeDrink typeDrink){
         return ResponseEntity.ok(drinkService.getDrinksByType(typeDrink));
@@ -73,6 +77,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "200", description = "Data Founded"),
             @ApiResponse(responseCode = "404", description = "Data Not Founded"),
     })
+    @Transactional
     @GetMapping("/byName/{drinkName}")
     public ResponseEntity<List<DrinkResponseDTO>> getDrinksByName(@PathVariable String drinkName) {
         return ResponseEntity.ok(drinkService.getDrinksByName(drinkName));
@@ -85,6 +90,7 @@ public class DrinkController {
             @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
     })
+    @Transactional
     @PutMapping("/{drinkID}/{userID}")
     public ResponseEntity<DrinkResponseDTO> updateDrink(@PathVariable String drinkID, @PathVariable String userID, @RequestBody @Valid DrinkRequestDTO drinkRequestDTO) {
         return ResponseEntity.ok(drinkService.updateDrink(drinkID, userID, drinkRequestDTO));

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "409", description = "Already Exists An Email on System")
 
     })
+    @Transactional
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.registerUser(userRequestDTO));
@@ -48,6 +50,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded"),
             @ApiResponse(responseCode = "409", description = "Already Exists An Email on System")
     })
+    @Transactional
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         return ResponseEntity.ok(authenticationService.loginUser(userLoginDTO, authenticationManager));
@@ -58,6 +61,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "403", description = "Forbidden Word Founded"),
             @ApiResponse(responseCode = "409", description = "Already Exists An Email on System")
     })
+    @Transactional
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponseDTO> refreshToken(HttpServletRequest request) {
         return ResponseEntity.ok(authenticationService.validateRefreshToken(request));
