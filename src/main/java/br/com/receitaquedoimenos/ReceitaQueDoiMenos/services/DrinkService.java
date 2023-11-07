@@ -45,7 +45,7 @@ public class DrinkService {
 
     public List<DrinkResponseDTO> getDrinksByName(String drinkName) {
         return drinkRepository.findAllByNameIgnoreCase(drinkName)
-                .stream()
+                .parallelStream()
                 .map(drinkMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -53,14 +53,14 @@ public class DrinkService {
 
     public List<DrinkResponseDTO> getDrinksByType(TypeDrink type) {
         return drinkRepository.findAllByTypeDrink(type)
-                .stream()
+                .parallelStream()
                 .map(drinkMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public List<DrinkResponseDTO> getAllDrinks() {
         return drinkRepository.findAll()
-                .stream()
+                .parallelStream()
                 .map(drinkMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }

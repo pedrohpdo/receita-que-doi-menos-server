@@ -5,7 +5,6 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoun
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.UnauthorizedOperationException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.Drink;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkMapper;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealMapper;
@@ -33,10 +32,11 @@ public class UserService {
     MealMapper mealMapper;
 
     @Autowired
-    DrinkMapper drinkMapper;
+    DrinkRepository drinkRepository;
 
     @Autowired
-    DrinkRepository drinkRepository;
+    DrinkMapper drinkMapper;
+
 
     @Autowired
     UserMapper userMapper;
@@ -52,8 +52,9 @@ public class UserService {
 
     public List<MealResponseDTO> getAllCreatedMeals(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> mealRepository.findAllById(userFounded.getCreatedMealsID())
-                        .stream()
+                .map(userFounded -> mealRepository
+                        .findAllById(userFounded.getCreatedMealsID())
+                        .parallelStream()
                         .map(mealMapper::toResponseDTO)
                         .collect(Collectors.toList())
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
@@ -61,8 +62,9 @@ public class UserService {
 
     public List<MealResponseDTO> getAllFavoriteMeals(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> mealRepository.findAllById(userFounded.getFavoriteMealsID())
-                        .stream()
+                .map(userFounded -> mealRepository
+                        .findAllById(userFounded.getFavoriteMealsID())
+                        .parallelStream()
                         .map(mealMapper::toResponseDTO)
                         .collect(Collectors.toList())
 
@@ -71,8 +73,9 @@ public class UserService {
 
     public List<DrinkResponseDTO> getAllCreatedDrinks(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> drinkRepository.findAllById(userFounded.getCreatedDrinksID())
-                        .stream()
+                .map(userFounded -> drinkRepository
+                        .findAllById(userFounded.getCreatedDrinksID())
+                        .parallelStream()
                         .map(drinkMapper::toResponseDTO)
                         .collect(Collectors.toList())
 
@@ -81,8 +84,9 @@ public class UserService {
 
     public List<DrinkResponseDTO> getAllFavoriteDrinks(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> drinkRepository.findAllById(userFounded.getFavoriteDrinksID())
-                        .stream()
+                .map(userFounded -> drinkRepository.
+                        findAllById(userFounded.getFavoriteDrinksID())
+                        .parallelStream()
                         .map(drinkMapper::toResponseDTO)
                         .collect(Collectors.toList())
 
