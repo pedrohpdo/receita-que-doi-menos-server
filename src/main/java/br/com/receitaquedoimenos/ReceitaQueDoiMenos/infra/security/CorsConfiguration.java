@@ -13,8 +13,7 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins(
-                        "https://receita-que-doi-menos-server.up.railway.app",
-                        "http://receita-que-doi-menos-server.up.railway.app");
+                        "https://receita-que-doi-menos-server.up.railway.app");
             }
         };
     }
