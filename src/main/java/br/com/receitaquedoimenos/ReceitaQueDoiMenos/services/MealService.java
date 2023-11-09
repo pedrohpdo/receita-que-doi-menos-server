@@ -44,14 +44,14 @@ public class MealService {
 
     public List<MealResponseDTO> getAll() {
         return mealRepository.findAll()
-                .parallelStream()
+                .stream()
                 .map(mealMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     public List<MealResponseDTO> getMealsByName(String name) {
         return mealRepository.findAllByNameIgnoreCase(name)
-                .parallelStream()
+                .stream()
                 .map(mealMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -64,7 +64,7 @@ public class MealService {
 
     public List<MealResponseDTO> getMealsByTypeMeal(TypeMeal typeMeal) {
         return mealRepository.findAllByTypeMeal(typeMeal)
-                .parallelStream()
+                .stream()
                 .map(mealMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -85,6 +85,38 @@ public class MealService {
 
                     Meal mealUpdated = mealRepository.save(mealFounded);
 
+                    //Cascade Operation on UserCreator
+//                    userRepository.findById(userID)
+//                            .ifPresent(userCreator -> {
+//                                for (Meal mealToUpdate: userCreator.getCreatedMeals()) {
+//                                    if (mealToUpdate.getId().equals(mealID)) {
+//                                        mealToUpdate.setName(mealRequestDTO.name());
+//                                        mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
+//                                        mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
+//                                        mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
+//                                        mealToUpdate.setInstructions(mealRequestDTO.instructions());
+//                                        mealToUpdate.setIngredients(mealRequestDTO.ingredients());
+//                                        userRepository.save(userCreator);
+//                                        break;
+//                                    }
+//                                }
+//                            });
+
+                    // Cascade Operation on All Other Users
+//                    for (User userToUpdate: userRepository.findByIdNot(userID)) {
+//                        for(Meal mealToUpdate : userToUpdate.getFavoriteMeals()){
+//                            if (mealToUpdate.getId().equals(mealID)) {
+//                                mealToUpdate.setName(mealRequestDTO.name());
+//                                mealToUpdate.setTypeMeal(mealRequestDTO.typeMeal());
+//                                mealToUpdate.setPhotoURL(mealRequestDTO.photoURL());
+//                                mealToUpdate.setVideoURL(mealRequestDTO.videoURL());
+//                                mealToUpdate.setInstructions(mealRequestDTO.instructions());
+//                                mealToUpdate.setIngredients(mealRequestDTO.ingredients());
+//                                userRepository.save(userToUpdate);
+//                                break;
+//                            }
+//                        }
+//                    }
                     return mealMapper.toResponseDTO(mealUpdated);
 
                 }).orElseThrow(() -> new DataNotFoundException("Recipe Not Found"));
