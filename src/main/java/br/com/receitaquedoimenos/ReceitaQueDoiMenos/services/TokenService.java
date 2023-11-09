@@ -33,6 +33,8 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
             return JWT.create()
                     .withIssuer(issuer)
+                    .withClaim("user_id", user.getId())
+                    .withClaim("user_name", user.getName())
                     .withSubject(user.getEmail())
                     .withExpiresAt(getDuration(this.accessTokenExpiration))
                     .sign(algorithm);
@@ -47,6 +49,8 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
             return JWT.create()
                     .withIssuer(issuer)
+                    .withClaim("user_id", user.getId())
+                    .withClaim("user_name", user.getName())
                     .withSubject(user.getEmail())
                     .withExpiresAt(getDuration(this.refreshTokenExpiration))
                     .sign(algorithm);
@@ -60,7 +64,7 @@ public class TokenService {
             try {
                 Algorithm algorithm = Algorithm.HMAC256(this.secret);
                 return JWT.require(algorithm)
-                        .withIssuer("receita-develop")
+                        .withIssuer(issuer)
                         .build()
                         .verify(token)
                         .getSubject();
