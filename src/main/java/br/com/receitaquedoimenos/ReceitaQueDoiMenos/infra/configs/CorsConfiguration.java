@@ -1,4 +1,4 @@
-package br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.security;
+package br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
