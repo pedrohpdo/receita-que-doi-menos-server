@@ -60,6 +60,7 @@ public class UserService {
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
     }
 
+
     public List<MealResponseDTO> getAllFavoriteMeals(String userID) {
         return userRepository.findById(userID)
                 .map(userFounded -> mealRepository

@@ -9,7 +9,6 @@ import java.util.List;
 public interface UserRepository extends MongoRepository<User, String> {
     Boolean existsByEmail(String email);
     Boolean existsByEmailAndIdNot(String id, String email);
-    List<User> findByIdNot(String id);
     List<User> findByFavoriteDrinksIDContainingAndIdNot(String drinkID, String userID);
     List<User> findByFavoriteMealsIDContainingAndIdNot(String mealID, String userID);
     UserDetails findByEmail(String email);
