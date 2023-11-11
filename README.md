@@ -40,6 +40,12 @@ Caso queira executar o projeto localmente, certifique-se de criar um arquivo .pr
 
 Dentro dele crie a seguintes credenciais, ou implemente seus respectivos valores:
 
+### Testando Servidor Online
+
+Caso queira testar o servidor de forma online, a URL relacionada pode ser acessada aqui https://receita-que-doi-menos-server.up.railway.app ou, você também pode acessar a documentação do Swagger, por questões de praticidade.
+
+A interface de testes e Documentação pode ser acessada [clicando aqui](https://receita-que-doi-menos-server.up.railway.app/swagger-ui/index.html#) 
+
 
 `spring.data.mongodb.uri=${DATABASE_URL}` <br>
 `api.security.token.secret=${JWT_SECRET}` <br>
