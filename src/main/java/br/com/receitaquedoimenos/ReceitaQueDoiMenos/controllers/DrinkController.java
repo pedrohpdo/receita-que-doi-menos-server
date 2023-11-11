@@ -1,9 +1,14 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler.ErrorResponse;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.TypeDrink;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.DrinkService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -21,7 +26,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 
-
 import java.util.List;
 
 @RestController
@@ -31,12 +35,18 @@ public class DrinkController {
     @Autowired
     DrinkService drinkService;
 
+    @Operation(summary = "Criar uma nova instância de uma Drink")
+    @Parameter(
+            name = "drinkRequestDTO",
+            description = "Informações Básicas para criar um Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DrinkRequestDTO.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Data successfully registered"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data"),
-            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict"),
-            @ApiResponse(responseCode = "404", description = "User Not Found"),
-            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
+            @ApiResponse(responseCode = "201", description = "Data successfully registered", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized to Create New Data", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "409", description = "Failed to register. Information Conflict", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
     @Transactional
     @PostMapping
@@ -44,38 +54,57 @@ public class DrinkController {
         return ResponseEntity.status(HttpStatus.CREATED).body(drinkService.createDrink(drinkRequestDTO));
     }
 
+    @Operation(summary = "Retorna um Drinks pelo seu ID")
+    @Parameter(
+            name = "drinkID",
+            description = "ID do Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Data Not Founded")
+            @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Dados não Encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
     @Transactional
     @GetMapping("/byId/{drinkID}")
-    public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String drinkID){
+    public ResponseEntity<DrinkResponseDTO> getDrinkById(@PathVariable String drinkID) {
         return ResponseEntity.ok(drinkService.getDrinkById(drinkID));
     }
 
+    @Operation(summary = "Retorna todos os Drinks Registrados")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Founded"),
+            @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
     })
     @Transactional
     @GetMapping("/all")
-    public ResponseEntity<List<DrinkResponseDTO>> getAllDrinks(){
+    public ResponseEntity<List<DrinkResponseDTO>> getAllDrinks() {
         return ResponseEntity.ok(drinkService.getAllDrinks());
     }
 
+    @Operation(summary = "Retorna o(s) drink(s) pelo seu tipo")
+    @Parameter(
+            name = "typeDrink",
+            description = "Tipo do Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TypeDrink.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
+            @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Dados não Encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @Transactional
     @GetMapping("/byType/{typeDrink}")
-    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByType(@PathVariable TypeDrink typeDrink){
+    public ResponseEntity<List<DrinkResponseDTO>> getDrinksByType(@PathVariable TypeDrink typeDrink) {
         return ResponseEntity.ok(drinkService.getDrinksByType(typeDrink));
     }
 
+    @Operation(summary = "Retorna o(s) drink(s) pelo seu nome")
+    @Parameter(
+            name = "drinkName",
+            description = "Nome do Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Data Not Founded"),
+            @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Dados não Encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
     })
     @Transactional
     @GetMapping("/byName/{drinkName}")
@@ -84,11 +113,27 @@ public class DrinkController {
 
     }
 
+    @Operation(summary = "Atualiza as Informações de um Drink")
+    @Parameter(
+            name = "drinkID",
+            description = "ID do Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
+    @Parameter(
+            name = "userID",
+            description = "ID do Usuário Criador",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
+    @Parameter(
+            name = "drinkRequestDTO",
+            description = "Novas Informações sobre o Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = DrinkRequestDTO.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data Founded"),
-            @ApiResponse(responseCode = "404", description = "Cannot Found Any Data"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized Update Operation"),
-            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
+            @ApiResponse(responseCode = "200", description = "Dados Atualizados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Dados sobre o Drink não encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Operação não Autorizada", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "403", description = "Palavra Proibida Encontrada", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
     @Transactional
     @PutMapping("/{drinkID}/{userID}")
@@ -96,11 +141,22 @@ public class DrinkController {
         return ResponseEntity.ok(drinkService.updateDrink(drinkID, userID, drinkRequestDTO));
     }
 
+    @Operation(summary = "Deletar Registro de um Drink")
+    @Parameter(
+            name = "drinkID",
+            description = "ID do Drink",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
+    @Parameter(
+            name = "userID",
+            description = "ID do Usuário Criador",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Data Successfully Deleted. No Content."),
-            @ApiResponse(responseCode = "404", description = "Meal Id Not Founded on Database"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized Delete Operation"),
-            @ApiResponse(responseCode = "403", description = "Forbidden Word Founded")
+            @ApiResponse(responseCode = "204", description = "Dados Apagados com Sucesso. Sem Conteúdo."),
+            @ApiResponse(responseCode = "404", description = "Drink não Encontrado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Operação não Autorizada", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+            @ApiResponse(responseCode = "403", description = "Palavra Proibida Encontrada", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
     @Transactional
     @DeleteMapping("/{drinkID}/{userID}")
