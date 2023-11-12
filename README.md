@@ -40,7 +40,7 @@ Caso queira executar o projeto localmente, certifique-se de criar um arquivo .pr
 
 Dentro dele crie a seguintes credenciais, ou implemente seus respectivos valores:
 
-### Testando Servidor Online
+### Testando Servidor Online 🌐
 
 Caso queira testar o servidor de forma online, a URL relacionada pode ser acessada aqui https://receita-que-doi-menos-server.up.railway.app ou, você também pode acessar a documentação do Swagger, por questões de praticidade.
 
@@ -52,7 +52,9 @@ A interface de testes e Documentação pode ser acessada [clicando aqui](https:/
 `api.security.token.issuer=${ISSUER}` <br>
 `api.security.token.access.duration=${ACCESS-DURATION}` <br>
 `api.security.token.refresh.duration=${REFRESH-DURATION}`
-
+    
+### Documentação 📚
+Caso queira entender melhor o funcionamento dos serviços da aplicação, a documentação do projeto é acessível [clicando aqui](https://pedrohpdo.github.io/receita-que-doi-menos-docs/br/com/receitaquedoimenos/ReceitaQueDoiMenos/package-summary.html)
 
 ## Autores 🧑‍💻
 
