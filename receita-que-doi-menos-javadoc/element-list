@@ -1,0 +1,14 @@
+br.com.receitaquedoimenos.ReceitaQueDoiMenos
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.configs
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.security
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.services
+br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils
