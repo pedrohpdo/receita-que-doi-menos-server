@@ -1,7 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink;
 
+
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,10 +9,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 
+/**
+ * A classe Drink representa uma bebida dentro do sistema
+ *
+ * @author Pedro Henrique Pereira de Oliveira
+ * @since 2023.2
+ */
 @Document(collection = "drinks")
 @Data
 @AllArgsConstructor

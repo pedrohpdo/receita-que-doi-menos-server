@@ -13,6 +13,12 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 
+/**
+ * A classe Meal representa uma refeição dentro do sistema
+ *
+ * @author Pedro Henrique Pereira de Oliveira
+ * @since 2023.2
+ */
 @Document(collection = "recipes")
 @Data
 @AllArgsConstructor
@@ -41,6 +47,17 @@ public class Meal {
     @NotBlank
     private String creatorID;
 
+    /**
+     * Contrução de uma nova instância de uma refeição dentro do sistema
+     *
+     * @param name         String referente ao nome
+     * @param typeMeal     Enum referente ao tipo da refeição
+     * @param photoURL     String URL de uma imagem
+     * @param videoURL     String URL de um vídeo
+     * @param ingredients  ArrayList contendo os ingredientes
+     * @param instructions String referente ao modo de preparo
+     * @param creatorID    String referente ao criador da refeição
+     */
     public Meal(String name, TypeMeal typeMeal,
                 String photoURL, String videoURL,
                 ArrayList<Ingredient> ingredients,

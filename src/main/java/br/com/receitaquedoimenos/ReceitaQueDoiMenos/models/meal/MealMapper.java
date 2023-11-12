@@ -8,24 +8,44 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
+/**
+ * Classe que Representa um mapeador de entidades, melhorando a abstração dentro dos serviços.
+ *
+ * @author Pedro Henrique Pereira de Oliveira
+ */
 @Component
 public class MealMapper {
 
     @Autowired
     UserRepository userRepository;
 
-    public Meal toEntity(MealRequestDTO requestDTO) {
+    /**
+     * Retorna uma instância da Meal.class a partir de um record MealRequestDTO
+     *
+     * @param mealRequestDTO MealRequestDTO recebido
+     * @return Instância Meal.class
+     */
+    public Meal toEntity(MealRequestDTO mealRequestDTO) {
         return new Meal(
-                requestDTO.name(),
-                requestDTO.typeMeal(),
-                requestDTO.photoURL(),
-                requestDTO.videoURL(),
-                requestDTO.ingredients(),
-                requestDTO.instructions(),
-                requestDTO.creatorID()
+                mealRequestDTO.name(),
+                mealRequestDTO.typeMeal(),
+                mealRequestDTO.photoURL(),
+                mealRequestDTO.videoURL(),
+                mealRequestDTO.ingredients(),
+                mealRequestDTO.instructions(),
+                mealRequestDTO.creatorID()
         );
     }
 
+    /**
+     * Retorna a Instância de um record MealResponseDTO a partir de um Meal.class
+     * <p>
+     * Ps: É retornado um conjunto de informações adicionais nessa instância, alocados em um record
+     * UserCreatorRecipeResponseDTO, sendo informações adquiridas dentro de UserRepository.class
+     *
+     * @param meal Meal.class recebido
+     * @return Instância MealResponseDTO
+     */
     public MealResponseDTO toResponseDTO(Meal meal) {
         User creator = userRepository.findById(meal.getCreatorID()).get();
 

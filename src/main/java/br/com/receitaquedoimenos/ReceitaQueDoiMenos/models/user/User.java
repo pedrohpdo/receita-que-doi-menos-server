@@ -1,7 +1,5 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user;
 
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.Drink;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.Meal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,15 +16,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Representação de um Usuário dentro do Sistema
+ * <p>
+ * UserDetails representa uma classe que o Spring identificará como um usuário a ser autenticado,
+ * essa classe simplesmente irá salvar informações do usuário, que serão encapsuladas depois em
+ * objetos do tipo Authentication.
+ *
+ * @author Pedro Henrique Pereira de Oliveira
+ * @since 2023.2
+ */
 @Document
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-/**
- * UserDetails representa uma classe que o Spring identificará como um usuário a ser autenticado,
- * essa classe simplesmente irá salvar informações do usuário, que serão encapsuladas depois em
- * objetos do tipo Authentication.
- */
 public class User implements UserDetails {
     @Id
     private String id;
@@ -65,7 +68,7 @@ public class User implements UserDetails {
     }
 
     /**
-     * @return uma Collection(List) de permissões que o usuário pode ter
+     * @return uma Collection(List) de permissões que o usuário tem dentro da aplicação
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,7 +76,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return this.password;
     }
 

@@ -11,11 +11,29 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A classe ForbiddenWordsValidator fornece métodos para validar a presença de palavras proibidas em textos, incluindo
+ * validação de dados de usuários, refeições e bebidas. Mantém uma lista de palavras proibidas e utiliza expressões
+ * regulares para verificar a presença dessas palavras nos textos fornecidos. Em caso de correspondência, uma exceção
+ * ForbbidenWordException é lançada indicando a presença de palavras proibidas.
+ *
+ * @author Pedro Henrique Pereira de Oliveira
+ * @version 1.0
+ * @since 2023.2
+ *
+ * @see ForbbidenWordException
+ */
 @Component
 public class ForbiddenWordsValidator {
 
+    /**
+     * Lista de palavras proibidas.
+     */
     private final ArrayList<String> forbiddenWords;
 
+    /**
+     * Construtor padrão que inicializa a lista de palavras proibidas.
+     */
     public ForbiddenWordsValidator(){
         this.forbiddenWords = new ArrayList<String>();
         this.forbiddenWords.add("pau");
@@ -61,6 +79,12 @@ public class ForbiddenWordsValidator {
         this.forbiddenWords.add("javascript");
     }
 
+    /**
+     * Valida a presença de palavras proibidas em um texto fornecido.
+     *
+     * @param text O texto a ser validado.
+     * @throws ForbbidenWordException Se uma palavra proibida for encontrada no texto.
+     */
     public void validateString(String text) {
         for (String word:
              this.forbiddenWords) {

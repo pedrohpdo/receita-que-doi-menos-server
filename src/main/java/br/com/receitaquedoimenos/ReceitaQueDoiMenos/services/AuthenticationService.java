@@ -4,6 +4,7 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataAlready
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.TokenException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
@@ -37,9 +38,19 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     UserMapper userMapper;
 
-
+    /**
+     * Registro de um novo usuário no sistema. Novos usuários terão suas senhas encriptadas dentro do sistema por
+     * razões de seguranaça
+     * <p>
+     * Todas as informações enviadas pelo UserRequestDTO serão validadas no filtro de palavras de palavras proibidas
+     *
+     * @param userRequestDTO Informações requeridas para um cadastro de usuário
+     * @return uma UserResponseDTO com informações de cadastro
+     * @throws DataAlreadyExistsException caso já exista um email igual cadastrado no sistema
+     */
     public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
-        if (userRepository.existsByEmail(userRequestDTO.email())) throw new DataAlreadyExistsException("User Already Exists");
+        if (userRepository.existsByEmail(userRequestDTO.email()))
+            throw new DataAlreadyExistsException("User Already Exists");
 
         validator.validateUserData(userRequestDTO);
         String passwordEncoded = passwordEncoder.encode(userRequestDTO.password());
@@ -47,8 +58,16 @@ public class AuthenticationService implements UserDetailsService {
         return userMapper.toResponseDTO(userRepository.save(new User(userRequestDTO.name(), userRequestDTO.email(), passwordEncoded)));
     }
 
-    public LoginResponseDTO loginUser(UserLoginDTO userLoginDTO, AuthenticationManager authenticationManager) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(userLoginDTO.email(), userLoginDTO.password());
+    /**
+     * Login do usuário dentro do sistema. As informações do Login devem estar devidamente autenticadas para serem
+     * validadas
+     *
+     * @param loginRequestDTO       Informações requeridas para o login do usuário
+     * @param authenticationManager Componente de autênticação já fornecessido no UserController
+     * @return Um JSON contendo tokens de acesso caso as informações do usuário estejam validadas
+     */
+    public LoginResponseDTO loginUser(LoginRequestDTO loginRequestDTO, AuthenticationManager authenticationManager) {
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(), loginRequestDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
         String token = tokenService.generateToken((User) auth.getPrincipal());
@@ -57,6 +76,15 @@ public class AuthenticationService implements UserDetailsService {
         return new LoginResponseDTO(token, refreshToken);
     }
 
+    /**
+     * Validação de um refresh token.
+     * <p>
+     * Usuário logados possuem um access_token e um refresh_token. Os refresh tokens devem ser enviados próximo ao prazo
+     * de expiração do access_token para que um novo seja gerado.
+     *
+     * @param request Formulário de requisição contendo um token de autorização
+     * @return Um novo access_token
+     */
     public RefreshTokenResponseDTO validateRefreshToken(HttpServletRequest request) {
         String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authenticationHeader != null) {

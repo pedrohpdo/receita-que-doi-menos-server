@@ -4,15 +4,24 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Informações referentes a um usuário criado ou atualizados requeridos dentro do sistema
+ *
+ * @param name     String referente ao nome do usuário
+ * @param email    String referente ao email do usuário
+ * @param password String referente a senha do usuário
+ * @author Pedro Henrique Pereira de Oliveira
+ */
 public record UserRequestDTO(
-        @NotBlank
+        @NotBlank(message = "name is required")
         String name,
 
-        @NotBlank
+        @NotBlank(message = "email is required")
         @Email
         String email,
 
-        @NotBlank
-        @Size(min = 8, max = 12, message = "Senha deve ter pelo menos 8 caracteres e no máximo 12")
+        @NotBlank(message = "password is required")
+        @Size(min = 8, max = 12, message = "password must have size 8 - 12")
         String password
-){}
+) {
+}

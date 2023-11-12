@@ -3,7 +3,7 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler.ErrorResponse;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenResponseDTO;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserLoginDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.AuthenticationService;
@@ -60,7 +60,7 @@ public class AuthenticationController {
     @Parameter(
             name = "userLoginDTO",
             description = "Informações Cadastrais do Usuário",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserLoginDTO.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = LoginRequestDTO.class)))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário Logado com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDTO.class))}),
             @ApiResponse(responseCode = "403", description = "Palavra Proibida Encontrada", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
@@ -69,8 +69,8 @@ public class AuthenticationController {
     })
     @Transactional
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-        return ResponseEntity.ok(authenticationService.loginUser(userLoginDTO, authenticationManager));
+    public ResponseEntity<LoginResponseDTO> loginUser(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+        return ResponseEntity.ok(authenticationService.loginUser(loginRequestDTO, authenticationManager));
     }
 
 
