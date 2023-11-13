@@ -74,7 +74,6 @@ public class TokenService {
             return JWT.create()
                     .withIssuer(issuer)
                     .withClaim("user_id", user.getId())
-                    .withClaim("user_name", user.getName())
                     .withSubject(user.getEmail())
                     .withExpiresAt(getDuration(this.refreshTokenExpiration))
                     .sign(algorithm);
