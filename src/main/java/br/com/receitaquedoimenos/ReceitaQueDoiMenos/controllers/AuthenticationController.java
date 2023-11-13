@@ -2,6 +2,7 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler.ErrorResponse;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
@@ -81,11 +82,11 @@ public class AuthenticationController {
     })
     @Parameter(
             name = "Refresh Token",
-            description = "Refresh Token Contido no Formulário de Request",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = HttpServletRequest.class)))
+            description = "Refresh Token Contido no Body da Requisição",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenRequestDTO.class)))
     @Transactional
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(HttpServletRequest request) {
-        return ResponseEntity.ok(authenticationService.validateRefreshToken(request));
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO bodyRequest) {
+        return ResponseEntity.ok(authenticationService.validateRefreshToken(bodyRequest));
     }
 }

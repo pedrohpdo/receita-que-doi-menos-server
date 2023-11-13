@@ -3,6 +3,7 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataAlreadyExistsException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.TokenException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.RefreshTokenResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
@@ -85,17 +86,13 @@ public class AuthenticationService implements UserDetailsService {
      * @param request Formulário de requisição contendo um token de autorização
      * @return Um novo access_token
      */
-    public RefreshTokenResponseDTO validateRefreshToken(HttpServletRequest request) {
-        String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authenticationHeader != null) {
-            String refreshToken = authenticationHeader.replace("Bearer ", "");
+    public RefreshTokenResponseDTO validateRefreshToken(RefreshTokenRequestDTO request) {
 
-            String emailExtracted = tokenService.validateToken(refreshToken);
-            User userDetails = (User) userRepository.findByEmail(emailExtracted);
+        String emailExtracted = tokenService.validateToken(request.refreshToken());
+        User userDetails = (User) userRepository.findByEmail(emailExtracted);
 
-            if (userDetails != null) {
-                return new RefreshTokenResponseDTO(tokenService.generateToken(userDetails));
-            }
+        if (userDetails != null) {
+            return new RefreshTokenResponseDTO(tokenService.generateToken(userDetails));
         }
         throw new TokenException("User Details Not Founded on Token ");
     }
