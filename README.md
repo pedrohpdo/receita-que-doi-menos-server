@@ -55,7 +55,7 @@ Caso queira testar o servidor de forma online, a URL relacionada pode ser acessa
 A interface de testes e Documentação pode ser acessada [clicando aqui](https://receita-que-doi-menos-server.up.railway.app/swagger-ui/index.html#) 
 
 ### Documentação 📚
-Caso queira entender melhor o funcionamento dos serviços da aplicação, a documentação do projeto é acessível [clicando aqui](https://pedrohpdo.github.io/receita-que-doi-menos-docs/br/com/receitaquedoimenos/ReceitaQueDoiMenos/package-summary.html)
+Caso queira entender melhor o funcionamento dos serviços da aplicação, a documentação do projeto é acessível [clicando aqui](https://pedrohpdo.github.io/receita-que-doi-menos-docs/)
 
 ## Autores 🧑‍💻
 
