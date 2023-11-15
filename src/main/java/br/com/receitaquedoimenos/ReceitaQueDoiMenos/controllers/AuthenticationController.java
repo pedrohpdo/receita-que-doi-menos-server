@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controlador REST para gerenciar operações relacionadas à autenticação na aplicação "ReceitaQueDoiMenos".
+ */
 @ApiResponses(value = {
         @ApiResponse(responseCode = "500", description = "Internal Server Error"),
         @ApiResponse(responseCode = "400", description = "Bad Request")
@@ -40,6 +42,12 @@ public class AuthenticationController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    /**
+     * Cadastro de um novo usuário.
+     *
+     * @param userRequestDTO Informações básicas para criar um novo usuário.
+     * @return ResponseEntity contendo os dados do usuário registrado e o status HTTP 201 (Created).
+     */
     @Operation(summary = "Cadastro de um Novo Usuário")
     @Parameter(
             name = "userRequestDTO",
@@ -57,6 +65,13 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.registerUser(userRequestDTO));
     }
 
+
+    /**
+     * Login de um usuário existente.
+     *
+     * @param loginRequestDTO Informações cadastrais do usuário para login.
+     * @return ResponseEntity contendo os dados do usuário logado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Login de um novo Usuário")
     @Parameter(
             name = "userLoginDTO",
@@ -74,7 +89,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.loginUser(loginRequestDTO, authenticationManager));
     }
 
-
+    /**
+     * Gera um novo Token de Acesso usando um Refresh Token.
+     *
+     * @param bodyRequest Refresh Token contido no corpo da requisição.
+     * @return ResponseEntity contendo o novo Token de Acesso e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Gera um Novo Token de Acesso", description = "Deve Receber um Refresh Token para Retornar um novo Token de Acesso")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Token Validado com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenResponseDTO.class))}),

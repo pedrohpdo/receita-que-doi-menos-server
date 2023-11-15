@@ -17,9 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar operações relacionadas a refeições na aplicação "ReceitaQueDoiMenos".
+ */
 @RestController
 @RequestMapping("/meals")
 public class MealController {
@@ -27,6 +29,12 @@ public class MealController {
     @Autowired
     MealService mealService;
 
+    /**
+     * Cria uma nova instância de uma refeição.
+     *
+     * @param mealRequestDTO Informações básicas para criar uma refeição.
+     * @return ResponseEntity contendo os dados da refeição criada e o status HTTP 201 (Created).
+     */
     @Operation(summary = "Criar uma nova instância de uma refeição")
     @Parameter(
             name = "mealRequestDTO",
@@ -46,6 +54,11 @@ public class MealController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mealService.createMeal(mealRequestDTO));
     }
 
+    /**
+     * Retorna todas as refeições registradas.
+     *
+     * @return ResponseEntity contendo a lista de todas as refeições e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna todos as Refeições registrados")
     @Transactional
     @ApiResponses(value = {
@@ -56,6 +69,12 @@ public class MealController {
         return ResponseEntity.ok(mealService.getAll());
     }
 
+    /**
+     * Retorna a(s) refeição(ões) pelo seu tipo.
+     *
+     * @param typeMeal Tipo da refeição.
+     * @return ResponseEntity contendo a lista de refeições do tipo especificado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna a(s) refeição(ões) pelo seu tipo")
     @Parameter(
             name = "typeMeal",
@@ -72,6 +91,12 @@ public class MealController {
         return ResponseEntity.ok(mealService.getMealsByTypeMeal(typeMeal));
     }
 
+    /**
+     * Retorna a(s) refeição(ões) pelo seu nome.
+     *
+     * @param name Nome da refeição.
+     * @return ResponseEntity contendo a lista de refeições com o nome especificado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna a(s) refeição(ões) pelo seu nome")
     @Parameter(
             name = "mealName",
@@ -88,7 +113,12 @@ public class MealController {
         return ResponseEntity.ok(mealService.getMealsByName(name));
     }
 
-
+    /**
+     * Retorna uma refeição pelo seu ID.
+     *
+     * @param mealID ID da refeição.
+     * @return ResponseEntity contendo os dados da refeição encontrada e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna uma refeição pelo seu ID")
     @Parameter(
             name = "mealID",

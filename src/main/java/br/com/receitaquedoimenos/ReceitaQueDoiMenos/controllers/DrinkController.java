@@ -28,12 +28,22 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar operações relacionadas a Drinks na aplicação "ReceitaQueDoiMenos".
+ */
 @RestController
 @RequestMapping("/drinks")
 public class DrinkController {
 
     @Autowired
     DrinkService drinkService;
+
+    /**
+     * Cria uma nova instância de um Drink.
+     *
+     * @param drinkRequestDTO Informações básicas para criar um Drink.
+     * @return ResponseEntity contendo os dados do Drink criado e o status HTTP 201 (Created).
+     */
 
     @Operation(summary = "Criar uma nova instância de uma Drink")
     @Parameter(
@@ -54,6 +64,12 @@ public class DrinkController {
         return ResponseEntity.status(HttpStatus.CREATED).body(drinkService.createDrink(drinkRequestDTO));
     }
 
+    /**
+     * Retorna um Drink pelo seu ID.
+     *
+     * @param drinkID ID do Drink.
+     * @return ResponseEntity contendo os dados do Drink encontrado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna um Drinks pelo seu ID")
     @Parameter(
             name = "drinkID",
@@ -70,6 +86,11 @@ public class DrinkController {
         return ResponseEntity.ok(drinkService.getDrinkById(drinkID));
     }
 
+    /**
+     * Retorna todos os Drinks registrados.
+     *
+     * @return ResponseEntity contendo uma lista de Drinks e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna todos os Drinks Registrados")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DrinkResponseDTO.class))}),
@@ -80,6 +101,12 @@ public class DrinkController {
         return ResponseEntity.ok(drinkService.getAllDrinks());
     }
 
+    /**
+     * Retorna o(s) drink(s) pelo seu tipo.
+     *
+     * @param typeDrink Tipo do Drink.
+     * @return ResponseEntity contendo uma lista de Drinks do tipo especificado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna o(s) drink(s) pelo seu tipo")
     @Parameter(
             name = "typeDrink",
@@ -96,6 +123,12 @@ public class DrinkController {
         return ResponseEntity.ok(drinkService.getDrinksByType(typeDrink));
     }
 
+    /**
+     * Retorna o(s) drink(s) pelo seu nome.
+     *
+     * @param drinkName Nome do Drink.
+     * @return ResponseEntity contendo uma lista de Drinks com o nome especificado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Retorna o(s) drink(s) pelo seu nome")
     @Parameter(
             name = "drinkName",
@@ -113,6 +146,14 @@ public class DrinkController {
 
     }
 
+    /**
+     * Atualiza as informações de um Drink.
+     *
+     * @param drinkID           ID do Drink.
+     * @param userID            ID do Usuário Criador.
+     * @param drinkRequestDTO   Novas informações sobre o Drink.
+     * @return ResponseEntity contendo os dados do Drink atualizado e o status HTTP 200 (OK).
+     */
     @Operation(summary = "Atualiza as Informações de um Drink")
     @Parameter(
             name = "drinkID",
@@ -141,6 +182,13 @@ public class DrinkController {
         return ResponseEntity.ok(drinkService.updateDrink(drinkID, userID, drinkRequestDTO));
     }
 
+    /**
+     * Deleta o registro de um Drink.
+     *
+     * @param drinkID ID do Drink.
+     * @param userID  ID do Usuário Criador.
+     * @return ResponseEntity sem conteúdo e o status HTTP 204 (No Content) após a exclusão bem-sucedida.
+     */
     @Operation(summary = "Deletar Registro de um Drink")
     @Parameter(
             name = "drinkID",

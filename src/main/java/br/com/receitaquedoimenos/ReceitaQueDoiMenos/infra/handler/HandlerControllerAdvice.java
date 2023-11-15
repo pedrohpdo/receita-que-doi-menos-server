@@ -15,10 +15,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Classe para lidar com exceções em nível de controlador, fornecendo respostas padronizadas.
+ */
 @RestControllerAdvice
 @Slf4j(topic = "CONTROLLER_ADVICE")
 public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
 
+    /**
+     * Manipula exceções de validação de argumentos do método.
+     *
+     * @param exception A exceção de validação de argumentos do método.
+     * @param headers Cabeçalhos HTTP da resposta.
+     * @param status O código de status HTTP da resposta.
+     * @param webRequest A solicitação da web.
+     * @return Uma resposta padronizada para exceções de validação de argumentos do método.
+     */
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException exception,
@@ -39,6 +51,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
     }
 
+    /**
+     * Manipula exceções de dados não encontrados.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de dados não encontrados.
+     */
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(DataNotFoundException exception,
                                                           HttpServletRequest request) {
@@ -51,10 +70,18 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
+
+    /**
+     * Manipula exceções para conflito de infomações.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de conflito de dados .
+     */
     @ExceptionHandler(ConflictDataException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(
             ConflictDataException exception,
-            WebRequest webRequest) {
+            WebRequest request) {
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
@@ -66,6 +93,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    /**
+     * Manipula exceções de dados já encontrados.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de dados já encontrados.
+     */
     @ExceptionHandler(DataAlreadyExistsException.class)
     public ResponseEntity<Object> handlerEntityAlreadyExistsException(
             DataAlreadyExistsException exception,
@@ -77,6 +111,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    /**
+     * Manipula exceções de operações não autorizadas.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de operações não autorizadas.
+     */
     @ExceptionHandler(UnauthorizedOperationException.class)
     public ResponseEntity<Object> handlerUnauthorizedOperationException(
             UnauthorizedOperationException exception,
@@ -88,6 +129,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
+    /**
+     * Manipula exceções de palavras proibidas encontradas.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de palavras proibidas encontradas.
+     */
     @ExceptionHandler(ForbbidenWordException.class)
     public ResponseEntity<Object> handlerForbbidenWordException(
             ForbbidenWordException exception,
@@ -99,6 +147,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    /**
+     * Manipula exceções com relação a problemas na geração ou validação de tokens.
+     *
+     * @param exception A exceção de dados não encontrados.
+     * @param request O HttpServletRequest associado à exceção.
+     * @return Uma resposta padronizada para exceções de geração ou validação de tokens.
+     */
     @ExceptionHandler(TokenException.class)
     public ResponseEntity<Object> handlerTokenException(TokenException exception, WebRequest request) {
         ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());

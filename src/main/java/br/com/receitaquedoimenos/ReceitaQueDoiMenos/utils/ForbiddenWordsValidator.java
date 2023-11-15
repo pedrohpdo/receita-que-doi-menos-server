@@ -2,7 +2,6 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ForbbidenWordException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
-import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.ingredient.Ingredient;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import org.springframework.stereotype.Component;
@@ -114,9 +113,9 @@ public class ForbiddenWordsValidator {
         validateString(drink.instructions());
         validateIngredients(drink.ingredients());
     }
-    private void validateIngredients(ArrayList<Ingredient> ingredients) {
-        for (Ingredient stringToValidate : ingredients) {
-            validateString(stringToValidate.getName());
+    private void validateIngredients(ArrayList<String> ingredients) {
+        for (String stringToValidate : ingredients) {
+            validateString(stringToValidate);
         }
     }
 }

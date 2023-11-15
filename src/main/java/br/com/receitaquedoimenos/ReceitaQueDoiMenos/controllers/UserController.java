@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * Controlador REST para gerenciar operações relacionadas a usuários, incluindo informações de perfil, receitas e curtidas.
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -28,6 +30,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * Recupera informações sobre um usuário com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário.
+     * @return ResponseEntity contendo as informações do usuário se encontrado, ou uma resposta de erro se não encontrado.
+     */
     @Operation(summary = "Retorna Informações do Usuário")
     @Parameter(
             name = "userID",
@@ -44,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getInfo(userID));
     }
 
+    /**
+     * Recupera as receitas criadas por um usuário com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário.
+     * @return ResponseEntity contendo a lista de refeições criadas se encontradas, ou uma resposta de erro se não encontradas.
+     */
     @Operation(summary = "Retorna as Receitas Criadas pelo Usuário")
     @Parameter(
             name = "userID",
@@ -60,6 +74,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllCreatedMeals(userID));
     }
 
+    /**
+     * Recupera as receitas favoritas do usuário com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário.
+     * @return ResponseEntity contendo a lista de refeições criadas se encontradas, ou uma resposta de erro se não encontradas.
+     */
     @Operation(summary = "Retorna as Receitas Favoritas do Usuário")
     @Parameter(
             name = "userID",
@@ -76,6 +96,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllFavoriteMeals(userID));
     }
 
+    /**
+     * Recupera os drinks criados do usuário com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário.
+     * @return ResponseEntity contendo a lista de refeições criadas se encontradas, ou uma resposta de erro se não encontradas.
+     */
     @Operation(summary = "Retorna os Drinks Criados pelo Usuário")
     @Parameter(
             name = "userID",
@@ -92,6 +118,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllCreatedDrinks(userID));
     }
 
+    /**
+     * Recupera os drinks favoritos do usuário com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário.
+     * @return ResponseEntity contendo a lista de refeições criadas se encontradas, ou uma resposta de erro se não encontradas.
+     */
     @Operation(summary = "Retorna os Drinks Favoritos pelo usuário")
     @Parameter(
             name = "userID",
@@ -108,6 +140,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllFavoriteDrinks(userID));
     }
 
+    /**
+     * Atualiza as informações do perfil do usuário com base no ID do usuário fornecido.
+     *
+     * @param userID          O ID do usuário.
+     * @param userRequestDTO  Informações atualizadas do usuário.
+     * @return ResponseEntity contendo as informações do usuário atualizadas se bem-sucedidas, ou uma resposta de erro se não.
+     */
     @Operation(summary = "Atualiza as Informações de Perfil")
     @Parameter(
             name = "userID",
@@ -132,6 +171,12 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfileInfo(userID, userRequestDTO));
     }
 
+    /**
+     * Exclui o perfil de um usuário junto com refeições e drinks associados com base no ID do usuário fornecido.
+     *
+     * @param userID O ID do usuário a ser excluído.
+     * @return ResponseEntity com um status de sucesso se o usuário for excluído, ou uma resposta de erro se não encontrado.
+     */
     @Operation(summary = "Deletar Perfil e todas as Suas Refeiçoes e Drinks Associados")
     @Parameter(
             name = "userID",
@@ -149,6 +194,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Curtir uma refeição em nome de um usuário.
+     *
+     * @param userID O ID do usuário realizando a curtida.
+     * @param mealID O ID da refeição a ser curtida.
+     * @return ResponseEntity com um status de sucesso se a operação de curtida for bem-sucedida, ou uma resposta de erro se não.
+     */
     @Operation(summary = "Like an annother meal")
     @Parameter(
             name = "userID",
@@ -172,6 +224,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Descurtir uma refeição previamente curtida em nome de um usuário.
+     *
+     * @param userID O ID do usuário realizando a descurtida.
+     * @param mealID O ID da refeição a ser descurtida.
+     * @return ResponseEntity com um status de sucesso se a operação de descurtida for bem-sucedida, ou uma resposta de erro se não.
+     */
     @Operation(summary = "Descurtir uma Refeição")
     @Parameter(
             name = "userID",
@@ -194,6 +253,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Curtir uma bebida em nome de um usuário.
+     *
+     * @param userID  O ID do usuário realizando a curtida.
+     * @param drinkID O ID da bebida a ser curtida.
+     * @return ResponseEntity com um status de sucesso se a operação de curtida for bem-sucedida, ou uma resposta de erro se não.
+     */
     @Operation(summary = "Curtir um Drink de Outro usuário")
     @Parameter(
             name = "userID",
@@ -217,6 +283,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Descurtir uma bebida previamente curtida em nome de um usuário.
+     *
+     * @param userID  O ID do usuário realizando a descurtida.
+     * @param drinkID O ID da bebida a ser descurtida.
+     * @return ResponseEntity com um status de sucesso se a operação de descurtida for bem-sucedida, ou uma resposta de erro se não.
+     */
     @Operation(summary = "Descurtir um Drink")
     @Parameter(
             name = "userID",

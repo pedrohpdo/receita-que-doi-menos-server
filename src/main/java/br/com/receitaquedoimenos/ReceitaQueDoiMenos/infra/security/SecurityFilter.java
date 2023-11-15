@@ -16,6 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro de segurança para processar tokens de autenticação em cada requisição.
+ */
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
@@ -25,6 +28,15 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * Executa o filtro de segurança para validar e processar o token de autenticação.
+     *
+     * @param request     O objeto HttpServletRequest contendo a requisição.
+     * @param response    O objeto HttpServletResponse contendo a resposta.
+     * @param filterChain O objeto FilterChain para encadear a execução de outros filtros.
+     * @throws ServletException Se ocorrer uma exceção relacionada ao Servlet.
+     * @throws IOException      Se ocorrer uma exceção de E/S.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.recoverToken(request);
@@ -39,6 +51,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Recupera o token de autenticação do cabeçalho da requisição.
+     *
+     * @param request O objeto HttpServletRequest contendo a requisição.
+     * @return O token de autenticação recuperado, ou null se não estiver presente.
+     */
     private String recoverToken(HttpServletRequest request) {
         String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authenticationHeader == null) return null;
