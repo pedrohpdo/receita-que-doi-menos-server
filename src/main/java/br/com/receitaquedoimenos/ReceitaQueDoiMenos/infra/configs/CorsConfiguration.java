@@ -21,8 +21,7 @@ public class CorsConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(
-                                "https://receita-que-doi-menos-server.up.railway.app")
+                registry.addMapping("/**").allowedOrigins("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
