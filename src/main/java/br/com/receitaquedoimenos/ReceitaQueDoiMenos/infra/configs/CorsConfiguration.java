@@ -24,7 +24,8 @@ public class CorsConfiguration {
                 registry.addMapping("/**").allowedOrigins(
                         "https://receita-que-doi-menos-server.up.railway.app",
                                 "http://localhost:3000")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*");
             }
         };
     }
