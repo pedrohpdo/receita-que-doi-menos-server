@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.hibernate.validator.constraints.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(responseCode = "500", description = "Internal Server Error"),
         @ApiResponse(responseCode = "400", description = "Bad Request")
 })
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
