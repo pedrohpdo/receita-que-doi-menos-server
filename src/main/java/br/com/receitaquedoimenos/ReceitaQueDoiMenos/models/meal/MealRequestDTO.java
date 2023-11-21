@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public record MealRequestDTO(
         @NotBlank String name,
-        @NotNull TypeMeal typeMeal,
+        TypeMeal typeMeal,
         String photoURL,
         String videoURL,
         @NotNull ArrayList<String> ingredients,
