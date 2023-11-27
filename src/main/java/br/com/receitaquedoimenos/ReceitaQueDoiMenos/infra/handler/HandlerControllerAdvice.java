@@ -42,11 +42,10 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Invalid Arguments");
 
-        log.error("Invalid Data Params");
-
         for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
             response.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        log.error("DADOS INVÁLIDOS: " + exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
     }
@@ -66,7 +65,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 exception.getMessage());
 
-        log.error("Cannot Find Entity", exception.getMessage());
+        log.error("DADOS NÃO ENCONTRADOS: " + exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
@@ -88,7 +87,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
                 exception.getMessage()
         );
 
-        log.error("Dados conflituosos dentro do sistema", exception);
+        log.error("CONFLITO DE DADOS: " + exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
@@ -105,7 +104,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
             DataAlreadyExistsException exception,
             WebRequest request
     ) {
-        log.error("Entidade não foi encontrada no sistema" + exception.getMessage());
+        log.error("DADOS JÁ EXISTENTES: " + exception.getMessage());
         ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.value(), exception.getLocalizedMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
@@ -123,7 +122,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
             UnauthorizedOperationException exception,
             WebRequest request
     ) {
-        log.error("Operação não autorizada" + exception.getMessage());
+        log.error("OPERAÇÃO NÃO AUTORIZADA: " + exception.getMessage());
         ErrorResponse response = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
@@ -141,7 +140,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
             ForbbidenWordException exception,
             WebRequest request
     ) {
-        log.error("Palavra Proibida Encontrada" + exception.getMessage());
+        log.error("PALAVRA PROIBIDA ENCONTRADA: " + exception.getMessage());
         ErrorResponse response = new ErrorResponse(HttpStatus.FORBIDDEN.value(), exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
@@ -158,7 +157,7 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handlerTokenException(TokenException exception, WebRequest request) {
         ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
 
-        log.error("Problem: " + exception.getMessage());
+        log.error("PROBLEMAS COM TOKEN: " + exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }

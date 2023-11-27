@@ -14,8 +14,10 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.DrinkRepository
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.MealRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
  * @since 2023.2
  */
 @Service
+@Slf4j(topic = "USER_SERVICE")
 public class UserService {
     @Autowired
     UserRepository userRepository;
@@ -67,9 +70,13 @@ public class UserService {
      * @return As informações do usuário como um UserResponseDTO.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado.
      */
+    @Transactional
     public UserResponseDTO getInfo(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> userMapper.toResponseDTO(userFounded))
+                .map(userFounded -> {
+                    log.info("INFORMAÇÕES DO USUÁRIO " + userID + " RETORNADAS COM SUCESSO");
+                    return userMapper.toResponseDTO(userFounded);
+                })
                 .orElseThrow(() -> new DataNotFoundException("User Not Founded"));
     }
 
@@ -80,13 +87,17 @@ public class UserService {
      * @return Uma lista de refeições criadas pelo usuário como MealResponseDTO.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado ou não tiver refeições criadas.
      */
+    @Transactional
     public List<MealResponseDTO> getAllCreatedMeals(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> mealRepository
-                        .findAllById(userFounded.getCreatedMealsID())
-                        .parallelStream()
-                        .map(mealMapper::toResponseDTO)
-                        .collect(Collectors.toList())
+                .map(userFounded -> {
+                            log.info("REFEIÇÕES DO USUÁRIO " + userID + " RETORNADAS COM SUCESSO");
+                            return mealRepository
+                                    .findAllById(userFounded.getCreatedMealsID())
+                                    .parallelStream()
+                                    .map(mealMapper::toResponseDTO)
+                                    .collect(Collectors.toList());
+                        }
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
     }
 
@@ -97,13 +108,17 @@ public class UserService {
      * @return Uma lista de refeições favoritas do usuário como MealResponseDTO.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado ou não tiver refeições favoritas.
      */
+    @Transactional
     public List<MealResponseDTO> getAllFavoriteMeals(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> mealRepository
-                        .findAllById(userFounded.getFavoriteMealsID())
-                        .parallelStream()
-                        .map(mealMapper::toResponseDTO)
-                        .collect(Collectors.toList())
+                .map(userFounded -> {
+                            log.info("REFEIÇÕES FAVORITADAS DO USUÁRIO " + userID + " RETORNADAS COM SUCESSO");
+                            return mealRepository
+                                    .findAllById(userFounded.getFavoriteMealsID())
+                                    .parallelStream()
+                                    .map(mealMapper::toResponseDTO)
+                                    .collect(Collectors.toList());
+                        }
 
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
     }
@@ -115,13 +130,17 @@ public class UserService {
      * @return Uma lista de bebidas criadas pelo usuário como DrinkResponseDTO.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado ou não tiver bebidas criadas.
      */
+    @Transactional
     public List<DrinkResponseDTO> getAllCreatedDrinks(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> drinkRepository
-                        .findAllById(userFounded.getCreatedDrinksID())
-                        .parallelStream()
-                        .map(drinkMapper::toResponseDTO)
-                        .collect(Collectors.toList())
+                .map(userFounded -> {
+                            log.info("DRINKS CRIADOS DO USUÁRIO " + userID + " RETORNADAS COM SUCESSO");
+                            return drinkRepository
+                                    .findAllById(userFounded.getCreatedDrinksID())
+                                    .parallelStream()
+                                    .map(drinkMapper::toResponseDTO)
+                                    .collect(Collectors.toList());
+                        }
 
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
     }
@@ -133,14 +152,17 @@ public class UserService {
      * @return Uma lista de bebidas favoritas do usuário como DrinkResponseDTO.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado ou não tiver bebidas favoritas.
      */
+    @Transactional
     public List<DrinkResponseDTO> getAllFavoriteDrinks(String userID) {
         return userRepository.findById(userID)
-                .map(userFounded -> drinkRepository.
-                        findAllById(userFounded.getFavoriteDrinksID())
-                        .parallelStream()
-                        .map(drinkMapper::toResponseDTO)
-                        .collect(Collectors.toList())
-
+                .map(userFounded -> {
+                            log.info("DRINKS CRIADOS DO USUÁRIO " + userID + " RETORNADAS COM SUCESSO");
+                            return drinkRepository.
+                                    findAllById(userFounded.getFavoriteDrinksID())
+                                    .parallelStream()
+                                    .map(drinkMapper::toResponseDTO)
+                                    .collect(Collectors.toList());
+                        }
                 ).orElseThrow(() -> new DataNotFoundException("Data Not Founded"));
     }
 
@@ -153,6 +175,7 @@ public class UserService {
      * @throws ConflictDataException Se já existir um usuário com o mesmo e-mail no sistema.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado.
      */
+    @Transactional
     public UserResponseDTO updateProfileInfo(String userID, UserRequestDTO userRequestDTO) {
         if (userRepository.existsByEmailAndIdNot(userRequestDTO.email(), userID)) {
             throw new ConflictDataException("Already Exists An Email on System.");
@@ -165,6 +188,7 @@ public class UserService {
                     userFounded.setPassword(userFounded.getPassword());
                     userFounded.setName(userRequestDTO.name());
                     userFounded.setEmail(userRequestDTO.email());
+                    log.info("PERFIL DO USUÁRIO " + userID + " ATUALIZADAS COM SUCESSO");
 
                     return userMapper.toResponseDTO(userRepository.save(userFounded));
                 })
@@ -177,13 +201,14 @@ public class UserService {
      * @param userID O ID do usuário cuja conta está sendo excluída.
      * @throws DataNotFoundException Se o usuário com o ID especificado não for encontrado.
      */
+    @Transactional
     public void deleteAccount(String userID) {
         userRepository.findById(userID)
                 .ifPresentOrElse(user -> {
                     mealRepository.deleteAllById(user.getCreatedMealsID());
                     drinkRepository.deleteAllById(user.getCreatedDrinksID());
                     userRepository.delete(user);
-
+                    log.info("PERFIL DO USUÁRIO " + userID + " DELETADO COM SUCESSO");
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
@@ -195,6 +220,7 @@ public class UserService {
      * @throws UnauthorizedOperationException Se o usuário estiver tentando curtir sua própria refeição.
      * @throws DataNotFoundException          Se o usuário ou a refeição não for encontrado.
      */
+    @Transactional
     public void likeMeal(String userID, String mealID) {
         Meal meal = mealRepository.findById(mealID)
                 .orElseThrow(() -> new DataNotFoundException("Meal Not Founded"));
@@ -206,7 +232,7 @@ public class UserService {
 
                     userFounded.getFavoriteMealsID().add(mealID);
                     userRepository.save(userFounded);
-
+                    log.info("USUÁRIO " + userID + "LIKE REFEIÇÃO " + mealID);
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
 
@@ -217,11 +243,13 @@ public class UserService {
      * @param mealID O ID da refeição que está sendo removida dos favoritos.
      * @throws DataNotFoundException Se o usuário ou a refeição não for encontrado.
      */
+    @Transactional
     public void unlikeMeal(String userID, String mealID) {
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
                     userFounded.getFavoriteMealsID().remove(mealID);
                     userRepository.save(userFounded);
+                    log.info("USUÁRIO " + userID + "UNLIKE REFEIÇÃO " + mealID);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
@@ -235,6 +263,7 @@ public class UserService {
      * @throws UnauthorizedOperationException Se o usuário estiver tentando curtir sua própria bebida.
      * @throws DataNotFoundException          Se o usuário ou a bebida não for encontrado.
      */
+    @Transactional
     public void likeDrink(String userID, String drinkID) {
         Drink drink = drinkRepository.findById(drinkID)
                 .orElseThrow(() -> new DataNotFoundException("Drink Not Founded"));
@@ -246,6 +275,7 @@ public class UserService {
 
                     userFounded.getFavoriteDrinksID().add(drinkID);
                     userRepository.save(userFounded);
+                    log.info("USUÁRIO " + userID + "LIKE REFEIÇÃO " + drinkID);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }
@@ -257,11 +287,13 @@ public class UserService {
      * @param drinkID O ID da bebida que está sendo removida dos favoritos.
      * @throws DataNotFoundException Se o usuário ou a bebida não for encontrado.
      */
+    @Transactional
     public void unlikeDrink(String userID, String drinkID) {
         userRepository.findById(userID)
                 .ifPresentOrElse(userFounded -> {
                     userFounded.getFavoriteDrinksID().remove(drinkID);
                     userRepository.save(userFounded);
+                    log.info("USUÁRIO " + userID + "UNLIKE DRINK " + drinkID);
 
                 }, () -> new DataNotFoundException("User Not Founded"));
     }

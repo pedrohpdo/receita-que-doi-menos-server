@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
@@ -49,6 +50,7 @@ public class AuthenticationService implements UserDetailsService {
      * @return uma UserResponseDTO com informações de cadastro
      * @throws DataAlreadyExistsException caso já exista um email igual cadastrado no sistema
      */
+    @Transactional
     public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByEmail(userRequestDTO.email()))
             throw new DataAlreadyExistsException("User Already Exists");
@@ -67,6 +69,7 @@ public class AuthenticationService implements UserDetailsService {
      * @param authenticationManager Componente de autênticação já fornecessido no UserController
      * @return Um JSON contendo tokens de acesso caso as informações do usuário estejam validadas
      */
+    @Transactional
     public LoginResponseDTO loginUser(LoginRequestDTO loginRequestDTO, AuthenticationManager authenticationManager) {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(), loginRequestDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
@@ -86,6 +89,7 @@ public class AuthenticationService implements UserDetailsService {
      * @param request Formulário de requisição contendo um token de autorização
      * @return Um novo access_token
      */
+    @Transactional
     public RefreshTokenResponseDTO validateRefreshToken(RefreshTokenRequestDTO request) {
 
         String emailExtracted = tokenService.validateToken(request.refreshToken());

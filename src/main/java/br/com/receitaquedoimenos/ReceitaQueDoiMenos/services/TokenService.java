@@ -6,6 +6,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ import java.time.ZoneOffset;
  * @since 2023.2
  */
 @Service
+@Slf4j(topic = "TOKEN_SERVICE")
 public class TokenService {
 
     @Value("${api.security.token.secret}")
@@ -48,6 +50,7 @@ public class TokenService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            log.info("ACCESS-TOKEN GERADO COM SUCESSO");
             return JWT.create()
                     .withIssuer(issuer)
                     .withClaim("user_id", user.getId())
@@ -55,7 +58,6 @@ public class TokenService {
                     .withSubject(user.getEmail())
                     .withExpiresAt(getDuration(this.accessTokenExpiration))
                     .sign(algorithm);
-
         } catch (JWTCreationException e) {
             throw new TokenException(e.getMessage());
         }
@@ -71,6 +73,7 @@ public class TokenService {
     public String generateRefreshToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            log.info("REFRESH-TOKEN GERADO COM SUCESSO");
             return JWT.create()
                     .withIssuer(issuer)
                     .withClaim("user_id", user.getId())
@@ -93,6 +96,7 @@ public class TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
+            log.info("TOKEN VALDIDADO COM SUCESSO");
             return JWT.require(algorithm)
                     .withIssuer(issuer)
                     .build()
