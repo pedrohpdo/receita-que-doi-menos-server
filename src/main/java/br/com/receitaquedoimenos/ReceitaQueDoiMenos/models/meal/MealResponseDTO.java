@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /**
  * Informações referentes a um drink criados ou atualizados retornados pelo sistema
  *
+ * @param id
  * @param name         String referente ao nome
  * @param typeMeal     Enum referente ao tipo da refeição
  * @param photo        String URL de uma imagem
@@ -17,6 +18,8 @@ import java.util.ArrayList;
  * @author Pedro Henrique Pereira de Oliveira
  */
 public record MealResponseDTO(
+
+        String id,
         String name,
         TypeMeal typeMeal,
         String photo,

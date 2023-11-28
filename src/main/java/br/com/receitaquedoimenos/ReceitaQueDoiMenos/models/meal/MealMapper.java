@@ -50,6 +50,7 @@ public class MealMapper {
         User creator = userRepository.findById(meal.getCreatorID()).get();
 
         return new MealResponseDTO(
+                meal.getId(),
                 meal.getName(),
                 meal.getTypeMeal(),
                 meal.getPhotoURL(),
