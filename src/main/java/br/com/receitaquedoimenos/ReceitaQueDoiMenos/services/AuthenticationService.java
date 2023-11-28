@@ -9,9 +9,8 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j(topic = "AUTH_SERVICE")
 public class AuthenticationService implements UserDetailsService {
 
     @Autowired
@@ -57,7 +57,7 @@ public class AuthenticationService implements UserDetailsService {
 
         validator.validateUserData(userRequestDTO);
         String passwordEncoded = passwordEncoder.encode(userRequestDTO.password());
-
+        log.info("USUÁRIO REGISTRADO COM SUCESSO");
         return userMapper.toResponseDTO(userRepository.save(new User(userRequestDTO.name(), userRequestDTO.email(), passwordEncoded)));
     }
 
@@ -77,6 +77,7 @@ public class AuthenticationService implements UserDetailsService {
         String token = tokenService.generateToken((User) auth.getPrincipal());
         String refreshToken = tokenService.generateRefreshToken((User) auth.getPrincipal());
 
+        log.info("USUÁRIO " + loginRequestDTO.email() +" LOGADO COM SUCESSO");
         return new LoginResponseDTO(token, refreshToken);
     }
 
@@ -96,6 +97,7 @@ public class AuthenticationService implements UserDetailsService {
         User userDetails = (User) userRepository.findByEmail(emailExtracted);
 
         if (userDetails != null) {
+            log.info("TOKEN PARA " + userDetails.getEmail() + " VALIDADO COM SUCESSO");
             return new RefreshTokenResponseDTO(tokenService.generateToken(userDetails));
         }
         throw new TokenException("User Details Not Founded on Token ");
