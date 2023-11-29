@@ -6,5 +6,5 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal;
  * @author Pedro Henrique Pereira de Oliveira
  */
 public enum TypeMeal {
-    BEEF, GOAT, CHICKEN, BREAKFAST, DESSERT
+    FASTFOOD, DINNER, LUNCH, BREAKFAST, DESSERT
 }
