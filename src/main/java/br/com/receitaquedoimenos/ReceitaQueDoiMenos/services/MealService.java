@@ -1,6 +1,7 @@
 package br.com.receitaquedoimenos.ReceitaQueDoiMenos.services;
 
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.DataNotFoundException;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.EmptyIngredientException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.UnauthorizedOperationException;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.*;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
@@ -54,6 +55,13 @@ public class MealService {
      */
     @Transactional
     public MealResponseDTO createMeal(MealRequestDTO mealRequestDTO) {
+
+
+        mealRequestDTO.ingredients().forEach(ingredient -> {
+            if (ingredient.isBlank()) { throw new EmptyIngredientException("Ingredient Must Not Be Blank");
+            }
+        });
+
         wordValidator.validateMeal(mealRequestDTO);
         Meal newMeal = mealRepository.save(mealMapper.toEntity(mealRequestDTO));
         log.info("RECEITA CRIADA:" + newMeal);

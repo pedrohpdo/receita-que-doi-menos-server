@@ -161,4 +161,13 @@ public class HandlerControllerAdvice extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    @ExceptionHandler(EmptyIngredientException.class)
+    public ResponseEntity<Object> handlerEmptyIngredientException(EmptyIngredientException exception, WebRequest request){
+        ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.value(), exception.getMessage());
+
+        log.error("INGREDIENTE NÃO PODE SER VAZIO");
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 }
