@@ -4,7 +4,10 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.exceptions.ForbbidenWo
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.WebRequestInterceptor;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -23,13 +26,13 @@ import java.util.regex.Pattern;
  * @see ForbbidenWordException
  */
 @Component
+@Slf4j(topic = "WORD_VALIDATOR")
 public class ForbiddenWordsValidator {
 
     /**
      * Lista de palavras proibidas.
      */
     private final ArrayList<String> forbiddenWords;
-
     /**
      * Construtor padrão que inicializa a lista de palavras proibidas.
      */
@@ -91,6 +94,7 @@ public class ForbiddenWordsValidator {
             Matcher match = pattern.matcher(text);
 
             if(match.find()) {
+                log.info(LogInfo.FORBIDDEN_WORD(word));
                 throw new ForbbidenWordException("Forbidden Word Founded");
             }
         }

@@ -8,6 +8,7 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.User;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.MealRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.LogInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,21 +57,19 @@ public class MealService {
     @Transactional
     public MealResponseDTO createMeal(MealRequestDTO mealRequestDTO) {
 
-
         mealRequestDTO.ingredients().forEach(ingredient -> {
-            if (ingredient.isBlank()) { throw new EmptyIngredientException("Ingredient Must Not Be Blank");
-            }
+            if (ingredient.isBlank()) { throw new EmptyIngredientException("Ingredient Must Not Be Blank");}
         });
 
         wordValidator.validateMeal(mealRequestDTO);
         Meal newMeal = mealRepository.save(mealMapper.toEntity(mealRequestDTO));
-        log.info("RECEITA CRIADA:" + newMeal);
 
         userRepository.findById(mealRequestDTO.creatorID())
                 .ifPresentOrElse(user -> {
                     user.getCreatedMealsID().add(newMeal.getId());
                     userRepository.save(user);
-                    log.info("RECEITA ASSOCIADA COM O CRIADOR: " + user.getEmail());
+
+                    log.info(LogInfo.RECIPE_CREATED(user.getEmail(), mealRequestDTO.name()));
 
                 }, () -> new DataNotFoundException("User Not Found"));
 
@@ -85,7 +84,7 @@ public class MealService {
      */
     @Transactional
     public List<MealResponseDTO> getAll() {
-        log.info("RECEITAS RETORNADAS");
+        log.info("TODAS AS RECEITAS RETORNADAS");
         return mealRepository.findAll()
                 .stream()
                 .map(mealMapper::toResponseDTO)
@@ -190,21 +189,19 @@ public class MealService {
                         throw new UnauthorizedOperationException("Unauthorized Operation");
 
                     mealRepository.delete(meal);
-                    log.info("RECEITA COM ID: " + mealID + " COM SUCESSO");
 
                     //Cascade Operation on UserCreator
                     userRepository.findById(userID)
                             .ifPresent(userCreator -> {
                                 userCreator.getCreatedMealsID().remove(mealID);
                                 userRepository.save(userCreator);
+                                log.info(LogInfo.RECIPE_DELETED(userCreator.getEmail(), meal.getName()));
                             });
-                    log.info("RECEITA REMOVIDA DA LISTA DO CRIADOR: " + userID);
                     // Cascade Operations
                     for (User userToUpdate : userRepository.findByFavoriteMealsIDContainingAndIdNot(mealID, userID)) {
                         userToUpdate.getFavoriteMealsID().remove(mealID);
                         userRepository.save(userToUpdate);
                     }
-                    log.info("RECEITA REMOVIDA DA LISTA DE FAVORITOS DE OUTROS USUÁRIOS");
                 }, () -> new DataNotFoundException("Recipe Not Found"));
     }
 }

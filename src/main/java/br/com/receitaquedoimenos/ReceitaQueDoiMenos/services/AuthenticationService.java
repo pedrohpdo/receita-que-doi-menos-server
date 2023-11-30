@@ -9,6 +9,7 @@ import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.login.LoginRequestDTO
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.*;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.repositories.UserRepository;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.ForbiddenWordsValidator;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.utils.LogInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,10 +75,13 @@ public class AuthenticationService implements UserDetailsService {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(), loginRequestDTO.password());
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
+        log.info(LogInfo.AUTHENTICATION_PERMITTED(loginRequestDTO.email()));
+
         String token = tokenService.generateToken((User) auth.getPrincipal());
         String refreshToken = tokenService.generateRefreshToken((User) auth.getPrincipal());
 
-        log.info("USUÁRIO " + loginRequestDTO.email() +" LOGADO COM SUCESSO");
+        log.info(LogInfo.TOKEN_GENERATED(loginRequestDTO.email()));
+
         return new LoginResponseDTO(token, refreshToken);
     }
 
@@ -97,7 +101,7 @@ public class AuthenticationService implements UserDetailsService {
         User userDetails = (User) userRepository.findByEmail(emailExtracted);
 
         if (userDetails != null) {
-            log.info("TOKEN PARA " + userDetails.getEmail() + " VALIDADO COM SUCESSO");
+            log.info(LogInfo.VALIDATE_REFRESH_TOKEN(userDetails.getEmail()));
             return new RefreshTokenResponseDTO(tokenService.generateToken(userDetails));
         }
         throw new TokenException("User Details Not Founded on Token ");
