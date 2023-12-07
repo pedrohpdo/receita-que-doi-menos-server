@@ -22,6 +22,7 @@ public record UserResponseDTO(
         String id,
         String name,
         String email,
+        String profilePhoto,
         ArrayList<String> createdMealsID,
         ArrayList<String> favoriteMealsID,
         ArrayList<String> createdDrinksID,

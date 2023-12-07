@@ -57,7 +57,7 @@ public class MealMapper {
                 meal.getVideoURL(),
                 meal.getIngredients(),
                 meal.getInstructions(),
-                new UserCreatorRecipeResponseDTO(meal.getCreatorID(), creator.getName(), creator.getEmail()));
+                new UserCreatorRecipeResponseDTO(meal.getCreatorID(), creator.getName(), creator.getEmail(), creator.getProfilePhoto()));
     }
 
 }

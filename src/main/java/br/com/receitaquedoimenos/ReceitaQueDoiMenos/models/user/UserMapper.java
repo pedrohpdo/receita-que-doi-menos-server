@@ -20,7 +20,8 @@ public class UserMapper {
         return new User(
                 userRequestDTO.name(),
                 userRequestDTO.email(),
-                userRequestDTO.password()
+                userRequestDTO.password(),
+                userRequestDTO.profilePhoto()
         );
     }
 
@@ -36,6 +37,7 @@ public class UserMapper {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getProfilePhoto(),
                 user.getCreatedMealsID(),
                 user.getFavoriteMealsID(),
                 user.getCreatedDrinksID(),

@@ -22,6 +22,8 @@ public record UserRequestDTO(
 
         @NotBlank(message = "password is required")
         @Size(min = 8, max = 12, message = "password must have size 8 - 12")
-        String password
+        String password,
+
+        String profilePhoto
 ) {
 }

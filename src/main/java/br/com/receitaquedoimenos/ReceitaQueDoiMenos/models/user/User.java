@@ -44,9 +44,11 @@ public class User implements UserDetails {
     private String email;
 
     @NotBlank
-    @Size(min = 8)
+    @Size(min = 8, max = 12)
     @NonNull
     private String password;
+
+    private String profilePhoto;
 
     private ArrayList<String> favoriteMealsID = new ArrayList<>();
 
@@ -61,10 +63,11 @@ public class User implements UserDetails {
         this.id = userID;
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String profilePhoto) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.profilePhoto = profilePhoto;
     }
 
     /**
