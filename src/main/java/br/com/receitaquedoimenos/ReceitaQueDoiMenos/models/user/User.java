@@ -70,6 +70,12 @@ public class User implements UserDetails {
         this.profilePhoto = profilePhoto;
     }
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     /**
      * @return uma Collection(List) de permissões que o usuário tem dentro da aplicação
      */

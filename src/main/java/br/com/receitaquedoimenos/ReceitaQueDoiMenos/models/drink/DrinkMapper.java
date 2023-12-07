@@ -56,7 +56,7 @@ public class DrinkMapper {
                 drink.getVideoURL(),
                 drink.getIngredients(),
                 drink.getInstructions(),
-                new UserCreatorRecipeResponseDTO(drink.getCreatorID(), creator.getName(), creator.getEmail())
+                new UserCreatorRecipeResponseDTO(drink.getCreatorID(), creator.getName(), creator.getEmail(), creator.getProfilePhoto())
         );
     }
 }
