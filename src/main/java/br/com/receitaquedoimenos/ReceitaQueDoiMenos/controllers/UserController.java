@@ -3,6 +3,7 @@ package br.com.receitaquedoimenos.ReceitaQueDoiMenos.controllers;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.infra.handler.ErrorResponse;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.drink.DrinkResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.meal.MealResponseDTO;
+import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserProfilePhotoDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserRequestDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.models.user.UserResponseDTO;
 import br.com.receitaquedoimenos.ReceitaQueDoiMenos.services.UserService;
@@ -58,8 +59,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Dados não Encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
-    public ResponseEntity<Void> updateProfilePhoto(@PathVariable String userID, @RequestBody String base64photo) {
-        userService.updateProfilePhoto(userID, base64photo);
+    public ResponseEntity<Void> updateProfilePhoto(@PathVariable String userID, @RequestBody UserProfilePhotoDTO base64photo) {
+        userService.updateProfilePhoto(userID, base64photo.base64photo());
         return ResponseEntity.ok().build();
     }
 
