@@ -55,7 +55,7 @@ public class UserController {
     @PutMapping("profile/photo/{userID}")
     public ResponseEntity<Void> updateProfilePhoto(@PathVariable String userID, @RequestBody String base64photo) {
         userService.updateProfilePhoto(userID, base64photo);
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok().build();
     }
 
     /**
