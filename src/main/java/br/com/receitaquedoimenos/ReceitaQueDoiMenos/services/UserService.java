@@ -80,6 +80,15 @@ public class UserService {
                 .orElseThrow(() -> new DataNotFoundException("User Not Founded"));
     }
 
+    @Transactional
+    public void updateProfilePhoto(String userId, String base64photo) {
+        userRepository.findById(userId)
+                .ifPresent(user -> {
+                    user.setProfilePhoto(base64photo);
+                    userRepository.save(user);
+                });
+    }
+
     /**
      * Obtém todas as refeições criadas por um usuário com base no ID do usuário.
      *

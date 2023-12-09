@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getInfo(userID));
     }
 
+    @PutMapping("profile/photo/{userID}")
+    public ResponseEntity<Void> updateProfilePhoto(@PathVariable String userID, @RequestBody String base64photo) {
+        userService.updateProfilePhoto(userID, base64photo);
+        return ResponseEntity.ok().build()
+    }
+
     /**
      * Recupera as receitas criadas por um usuário com base no ID do usuário fornecido.
      *
