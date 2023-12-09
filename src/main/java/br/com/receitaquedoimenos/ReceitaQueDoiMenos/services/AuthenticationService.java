@@ -55,7 +55,15 @@ public class AuthenticationService implements UserDetailsService {
     public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
         if (userRepository.existsByEmail(userRequestDTO.email()))
             throw new DataAlreadyExistsException("User Already Exists");
-
+        System.out.println(String.format(
+                """
+                Nome: %s;
+                Email: %s
+                Senha: %s
+                Foto: %s
+                                            
+                """, userRequestDTO.name(), userRequestDTO.email(), userRequestDTO.password(), userRequestDTO.profilePhoto()
+        ));
         validator.validateUserData(userRequestDTO);
         String passwordEncoded = passwordEncoder.encode(userRequestDTO.password());
         log.info("USUÁRIO REGISTRADO COM SUCESSO");
