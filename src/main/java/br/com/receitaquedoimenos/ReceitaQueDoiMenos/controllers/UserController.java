@@ -52,7 +52,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getInfo(userID));
     }
 
+    @Operation(summary = "atualiza foto de perfil")
     @PutMapping("profile/photo/{userID}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados Retornados com Sucesso", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Dados não Encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
+    })
     public ResponseEntity<Void> updateProfilePhoto(@PathVariable String userID, @RequestBody String base64photo) {
         userService.updateProfilePhoto(userID, base64photo);
         return ResponseEntity.ok().build();
